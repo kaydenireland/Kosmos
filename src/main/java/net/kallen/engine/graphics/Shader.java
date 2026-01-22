@@ -1,8 +1,14 @@
 package main.java.net.kallen.engine.graphics;
 
+import main.java.net.kallen.engine.math.Matrix4;
+import main.java.net.kallen.engine.math.Vector2;
+import main.java.net.kallen.engine.math.Vector3;
 import main.java.net.kallen.engine.util.FileUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.system.MemoryUtil;
+
+import java.nio.FloatBuffer;
 
 public class Shader {
 
@@ -51,6 +57,36 @@ public class Shader {
             System.err.println("Program Validation: " + GL20.glGetProgramInfoLog(programID));
         }
 
+    }
+
+    public int getUniformLocation(String name) {
+        return GL20.glGetUniformLocation(programID, name);
+    }
+
+    public void setUniform(String name, float value) {
+        GL20.glUniform1f(getUniformLocation(name), value);
+    }
+
+    public void setUniform(String name, int value) {
+        GL20.glUniform1i(getUniformLocation(name), value);
+    }
+
+    public void setUniform(String name, boolean value) {
+        GL20.glUniform1i(getUniformLocation(name), value ? 1 : 0);
+    }
+
+    public void setUniform(String name, Vector2 value) {
+        GL20.glUniform2f(getUniformLocation(name), value.getX(), value.getY());
+    }
+
+    public void setUniform(String name, Vector3 value) {
+        GL20.glUniform3f(getUniformLocation(name), value.getX(), value.getY(), value.getZ());
+    }
+
+    public void setUniform(String name, Matrix4 value) {
+        FloatBuffer matrix = MemoryUtil.memAllocFloat(Matrix4.SIZE * Matrix4.SIZE);
+        matrix.put(value.getAll()).flip();
+        GL20.glUniformMatrix4fv(getUniformLocation(name), true, matrix);
     }
 
     public void bind() {
