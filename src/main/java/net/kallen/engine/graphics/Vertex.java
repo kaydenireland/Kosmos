@@ -1,7 +1,7 @@
-package net.kallen.engine.graphics;
+package main.java.net.kallen.engine.graphics;
 
 
-import net.kallen.engine.math.Vector3;
+import main.java.net.kallen.engine.math.Vector3;
 
 public class Vertex {
     private Vector3 position;

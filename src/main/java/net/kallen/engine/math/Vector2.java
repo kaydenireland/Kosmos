@@ -1,4 +1,4 @@
-package net.kallen.engine.math;
+package main.java.net.kallen.engine.math;
 
 public class Vector2 {
     private float x, y;

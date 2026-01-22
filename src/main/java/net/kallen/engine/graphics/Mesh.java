@@ -1,4 +1,4 @@
-package net.kallen.engine.graphics;
+package main.java.net.kallen.engine.graphics;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;

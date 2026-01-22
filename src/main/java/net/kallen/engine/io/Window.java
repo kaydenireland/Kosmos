@@ -1,6 +1,6 @@
-package net.kallen.engine.io;
+package main.java.net.kallen.engine.io;
 
-import net.kallen.engine.math.Vector3;
+import main.java.net.kallen.engine.math.Vector3;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;

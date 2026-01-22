@@ -1,18 +1,20 @@
-package net.kallen.minecraft;
+package main.java.net.kallen.game;
 
-import net.kallen.engine.graphics.Mesh;
-import net.kallen.engine.graphics.Renderer;
-import net.kallen.engine.graphics.Vertex;
-import net.kallen.engine.io.Input;
-import net.kallen.engine.io.Window;
-import net.kallen.engine.math.Vector3;
+import main.java.net.kallen.engine.graphics.Mesh;
+import main.java.net.kallen.engine.graphics.Renderer;
+import main.java.net.kallen.engine.graphics.Shader;
+import main.java.net.kallen.engine.graphics.Vertex;
+import main.java.net.kallen.engine.io.Input;
+import main.java.net.kallen.engine.io.Window;
+import main.java.net.kallen.engine.math.Vector3;
 import org.lwjgl.glfw.GLFW;
 
-public class Minecraft implements Runnable {
+public class Game implements Runnable {
 
     public Thread gameThread;
     public Window window;
     public Renderer renderer;
+    public Shader shader;
     public final int WIDTH = 1280, HEIGHT = 780;
 
     public Mesh mesh = new Mesh(new Vertex[] {
@@ -31,13 +33,15 @@ public class Minecraft implements Runnable {
     }
 
     public void init() {
-        System.out.println("Initializing Minecraft");
-        window = new Window(WIDTH, HEIGHT, "Minecraft");
-        renderer = new Renderer();
+        System.out.println("Initializing Game");
+        window = new Window(WIDTH, HEIGHT, "Game");
+        shader = new Shader("/main/resources/shaders/mainVertex.glsl", "/main/resources/shaders/mainFragment.glsl");
+        renderer = new Renderer(shader);
         window.setBackgroundColor(0f, .1f, .1f);
         // window.setFullscreen(true);
         window.create();
         mesh.create();
+        shader.create();
     }
 
 
@@ -65,6 +69,6 @@ public class Minecraft implements Runnable {
     }
 
     public static void main(String[] args) {
-        new Minecraft().start();
+        new Game().start();
     }
 }

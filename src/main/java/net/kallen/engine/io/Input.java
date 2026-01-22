@@ -1,4 +1,4 @@
-package net.kallen.engine.io;
+package main.java.net.kallen.engine.io;
 
 import org.lwjgl.glfw.*;
 
