@@ -1,11 +1,9 @@
 package main.java.net.kallen.minecraft;
 
-import main.java.net.kallen.engine.graphics.Mesh;
-import main.java.net.kallen.engine.graphics.Renderer;
-import main.java.net.kallen.engine.graphics.Shader;
-import main.java.net.kallen.engine.graphics.Vertex;
+import main.java.net.kallen.engine.graphics.*;
 import main.java.net.kallen.engine.io.Input;
 import main.java.net.kallen.engine.io.Window;
+import main.java.net.kallen.engine.math.Vector2;
 import main.java.net.kallen.engine.math.Vector3;
 import org.lwjgl.glfw.GLFW;
 
@@ -18,14 +16,15 @@ public class Minecraft implements Runnable {
     public final int WIDTH = 1280, HEIGHT = 780;
 
     public Mesh mesh = new Mesh(new Vertex[] {
-            new Vertex(new Vector3(-0.5f,  0.5f, 0.0f), new Vector3(1f, 0f, 0f)),
-            new Vertex(new Vector3(-0.5f, -0.5f, 0.0f), new Vector3(1f, 0f, 1f)),
-            new Vertex(new Vector3( 0.5f, -0.5f, 0.0f), new Vector3(1f, 1f, 0f)),
-            new Vertex(new Vector3( 0.5f,  0.5f, 0.0f), new Vector3(0f, 1f, 1f))
+            new Vertex(new Vector3(-0.5f,  0.5f, 0.0f), new Vector3(1f, 0f, 0f), new Vector2(0f, 0f)),  // Top Right
+            new Vertex(new Vector3(-0.5f, -0.5f, 0.0f), new Vector3(1f, 0f, 1f), new Vector2(0f, 1f)),  // Bottom Left
+            new Vertex(new Vector3( 0.5f, -0.5f, 0.0f), new Vector3(1f, 1f, 0f), new Vector2(1f, 1f)),  // Bottom Right
+            new Vertex(new Vector3( 0.5f,  0.5f, 0.0f), new Vector3(0f, 1f, 1f), new Vector2(1f, 0f))   // Top Right
     }, new int[] {
             0, 1, 2,
             0, 3, 2
-    });
+    }, new Material("/main/resources/textures/ore.png")
+    );
 
     public void start() {
         gameThread = new Thread(this,"game");

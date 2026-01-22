@@ -49,11 +49,7 @@ public class Shader {
         GL20.glValidateProgram(programID);
         if(GL20.glGetProgrami(programID, GL20.GL_VALIDATE_STATUS) == GL11.GL_FALSE) {
             System.err.println("Program Validation: " + GL20.glGetProgramInfoLog(programID));
-            return;
         }
-
-        GL20.glDeleteShader(vertexID);
-        GL20.glDeleteShader(fragmentID);
 
     }
 
@@ -66,6 +62,12 @@ public class Shader {
     }
 
     public void destroy() {
+        GL20.glDetachShader(programID, vertexID);
+        GL20.glDetachShader(programID, fragmentID);
+
+        GL20.glDeleteShader(vertexID);
+        GL20.glDeleteShader(fragmentID);
+
         GL20.glDeleteProgram(programID);
     }
 
