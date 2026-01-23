@@ -5,6 +5,7 @@ import main.java.net.kallen.engine.io.Input;
 import main.java.net.kallen.engine.io.Window;
 import main.java.net.kallen.engine.math.Vector2;
 import main.java.net.kallen.engine.math.Vector3;
+import main.java.net.kallen.engine.objects.GameObject;
 import org.lwjgl.glfw.GLFW;
 
 public class Minecraft implements Runnable {
@@ -26,6 +27,8 @@ public class Minecraft implements Runnable {
     }, new Material("/main/resources/textures/ore.png")
     );
 
+    public GameObject object = new GameObject(new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(1,1,1), mesh);
+
     public void start() {
         gameThread = new Thread(this,"game");
         gameThread.start();
@@ -34,7 +37,7 @@ public class Minecraft implements Runnable {
     public void init() {
         System.out.println("Initializing Game");
         window = new Window(WIDTH, HEIGHT, "Game");
-        shader = new Shader("/main/resources/shaders/mainVertex.glsl", "/main/resources/shaders/mainFragment.glsl");
+        shader = new Shader("/main/resources/shaders/mainVertex.txt", "/main/resources/shaders/mainFragment.txt");
         renderer = new Renderer(shader);
         window.setBackgroundColor(0f, .1f, .1f);
         // window.setFullscreen(true);
@@ -58,11 +61,12 @@ public class Minecraft implements Runnable {
 
     private void update() {
         window.update();
+        object.update();
         // if (Input.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) System.out.println("X: " + Input.getScrollX() + ", Y: " + Input.getScrollY());
     }
 
     private void render() {
-        renderer.renderMesh(mesh);
+        renderer.renderObject(object);
         window.swapBuffers();
     }
 

@@ -14,7 +14,7 @@ import java.nio.IntBuffer;
 
 public class Material {
     private String path;
-    private float width, height;
+    private int width, height;
     private int textureID;
 
     public Material(String path) {
@@ -56,7 +56,7 @@ public class Material {
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 
             // Upload texture data
-            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, (int) width, (int) height, 0,
+            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0,
                     GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, image);
 
             // Free the image memory
