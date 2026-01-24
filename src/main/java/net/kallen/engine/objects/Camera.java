@@ -10,6 +10,7 @@ public class Camera {
     private Vector3 position, rotation;
     private float moveSpeed = 0.05f;
     private float mouseSensitivity = 0.15f;
+    private float distance = 2.0f, horizontalAngle = 0, verticalAngle = 0;
     private Vector2 oldMousePos = new Vector2(0f, 0f);
     private Vector2 newMousePos = new Vector2(0f, 0f);
 
@@ -36,6 +37,41 @@ public class Camera {
         float dy = newMousePos.getY() - oldMousePos.getY();
 
         rotation = Vector3.add(rotation, new Vector3(-dy * mouseSensitivity, -dx * mouseSensitivity, 0));
+
+        oldMousePos.set(newMousePos.getX(), newMousePos.getY());
+    }
+
+    public void update(GameObject object) {
+        newMousePos.setX((float) Input.getMouseX());
+        newMousePos.setY((float) Input.getMouseY());
+
+        float dx = (newMousePos.getX() - oldMousePos.getX());
+        float dy = (newMousePos.getY() - oldMousePos.getY());
+
+        if (Input.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
+            verticalAngle -= dy * mouseSensitivity;
+            horizontalAngle += dx * mouseSensitivity;
+        }
+        if (Input.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_RIGHT)) {
+            if (distance > 0) {
+                distance += dy * mouseSensitivity / 4;
+            } else {
+                distance = 0.1f;
+            }
+        }
+
+
+
+
+        float horizontalDistance = (float) (distance * Math.cos(Math.toRadians(verticalAngle)));
+        float verticalDistance = (float) (distance * Math.sin(Math.toRadians(verticalAngle)));
+
+        float xOffset = (float) (horizontalDistance * Math.sin(Math.toRadians(-horizontalAngle)));
+        float zOffset = (float) (horizontalDistance * Math.cos(Math.toRadians(-horizontalAngle)));
+
+        position.set(object.getPosition().getX() + xOffset, object.getPosition().getY() - verticalDistance, object.getPosition().getZ() + zOffset);
+
+        rotation.set(verticalAngle, -horizontalAngle, 0);
 
         oldMousePos.set(newMousePos.getX(), newMousePos.getY());
     }

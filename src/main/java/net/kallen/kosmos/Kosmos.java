@@ -16,6 +16,7 @@ public class Kosmos implements Runnable {
     public Renderer renderer;
     public Shader shader;
     public final int WIDTH = 1280, HEIGHT = 780;
+    private boolean thirdPerson = false;
 
     public Mesh mesh = new Mesh(new Vertex[] {
             //Back face
@@ -79,6 +80,8 @@ public class Kosmos implements Runnable {
             23, 21, 22
     }, new Material("/main/resources/textures/cat.png"));
 
+    public GameObject[] objects = new GameObject[500];
+
     public GameObject object = new GameObject(new Vector3(0f,0f,0f), new Vector3(0f,0f,0f), new Vector3(1f,1f,1f), mesh);
 
     public Camera camera = new Camera(new Vector3(0f, 0f, 1f), new Vector3(0f, 0f,0f));
@@ -90,7 +93,7 @@ public class Kosmos implements Runnable {
 
     public void init() {
         System.out.println("Initializing Game");
-        window = new Window(WIDTH, HEIGHT, "Game");
+        window = new Window(WIDTH, HEIGHT, "Window");
         shader = new Shader("/main/resources/shaders/mainVertex.txt", "/main/resources/shaders/mainFragment.txt");
         renderer = new Renderer(window, shader);
         window.setBackgroundColor(0f, .1f, .1f);
@@ -99,6 +102,12 @@ public class Kosmos implements Runnable {
         window.mouseState(true);
         mesh.create();
         shader.create();
+
+        objects[0] = object;
+        for (int i = 1; i < objects.length; i++) {
+            objects[i] = new GameObject(new Vector3((float) (Math.random() * 50 - 25), (float) (Math.random() * 50 - 25), (float) (Math.random() * 50 - 25)), new Vector3(0, 0, 0), new Vector3(1, 1, 1), mesh);
+        }
+
     }
 
 
@@ -109,6 +118,7 @@ public class Kosmos implements Runnable {
             update();
             render();
 
+            if (Input.isKeyDown(GLFW.GLFW_KEY_F)) thirdPerson = !thirdPerson;
             if (Input.isKeyDown(GLFW.GLFW_KEY_F11)) window.setFullscreen(!window.isFullscreen());
             if (Input.isKeyDown(GLFW.GLFW_KEY_L)) window.mouseState(!window.getMouseLock());
         }
@@ -117,11 +127,17 @@ public class Kosmos implements Runnable {
 
     private void update() {
         window.update();
-        camera.update();
+        if (thirdPerson) {
+            camera.update(object);
+        } else {
+            camera.update();
+        }
     }
 
     private void render() {
-        renderer.renderObject(object, camera);
+        for (GameObject gameObject : objects) {
+            renderer.renderObject(gameObject, camera);
+        }
         window.swapBuffers();
     }
 
