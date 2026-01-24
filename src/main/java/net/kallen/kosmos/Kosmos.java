@@ -1,14 +1,15 @@
-package main.java.net.kallen.minecraft;
+package main.java.net.kallen.kosmos;
 
 import main.java.net.kallen.engine.graphics.*;
 import main.java.net.kallen.engine.io.Input;
 import main.java.net.kallen.engine.io.Window;
 import main.java.net.kallen.engine.math.Vector2;
 import main.java.net.kallen.engine.math.Vector3;
+import main.java.net.kallen.engine.objects.Camera;
 import main.java.net.kallen.engine.objects.GameObject;
 import org.lwjgl.glfw.GLFW;
 
-public class Minecraft implements Runnable {
+public class Kosmos implements Runnable {
 
     public Thread gameThread;
     public Window window;
@@ -24,10 +25,12 @@ public class Minecraft implements Runnable {
     }, new int[] {
             0, 1, 2,
             0, 3, 2
-    }, new Material("/main/resources/textures/ore.png")
+    }, new Material("/main/resources/textures/cat.png")
     );
 
-    public GameObject object = new GameObject(new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(1,1,1), mesh);
+    public GameObject object = new GameObject(new Vector3(0f,0f,0f), new Vector3(0f,0f,0f), new Vector3(1f,1f,1f), mesh);
+
+    public Camera camera = new Camera(new Vector3(0f, 0f, 1f), new Vector3(0f, 0f,0f));
 
     public void start() {
         gameThread = new Thread(this,"game");
@@ -38,10 +41,11 @@ public class Minecraft implements Runnable {
         System.out.println("Initializing Game");
         window = new Window(WIDTH, HEIGHT, "Game");
         shader = new Shader("/main/resources/shaders/mainVertex.txt", "/main/resources/shaders/mainFragment.txt");
-        renderer = new Renderer(shader);
+        renderer = new Renderer(window, shader);
         window.setBackgroundColor(0f, .1f, .1f);
         // window.setFullscreen(true);
         window.create();
+        window.mouseState(true);
         mesh.create();
         shader.create();
     }
@@ -55,18 +59,18 @@ public class Minecraft implements Runnable {
             render();
 
             if (Input.isKeyDown(GLFW.GLFW_KEY_F11)) window.setFullscreen(!window.isFullscreen());
+            if (Input.isKeyDown(GLFW.GLFW_KEY_L)) window.mouseState(!window.getMouseLock());
         }
         close();
     }
 
     private void update() {
         window.update();
-        object.update();
-        // if (Input.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) System.out.println("X: " + Input.getScrollX() + ", Y: " + Input.getScrollY());
+        camera.update();
     }
 
     private void render() {
-        renderer.renderObject(object);
+        renderer.renderObject(object, camera);
         window.swapBuffers();
     }
 
@@ -77,6 +81,6 @@ public class Minecraft implements Runnable {
     }
 
     public static void main(String[] args) {
-        new Minecraft().start();
+        new Kosmos().start();
     }
 }

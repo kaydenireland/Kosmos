@@ -1,6 +1,8 @@
 package main.java.net.kallen.engine.graphics;
 
+import main.java.net.kallen.engine.io.Window;
 import main.java.net.kallen.engine.math.Matrix4;
+import main.java.net.kallen.engine.objects.Camera;
 import main.java.net.kallen.engine.objects.GameObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -9,13 +11,14 @@ import org.lwjgl.opengl.GL30;
 
 public class Renderer {
 
+    private Window window;
     private Shader shader;
 
-    public Renderer(Shader shader) {
-        this.shader = shader;
-    }
+    public Renderer(Window window, Shader shader) {
+        this.window = window;
+        this.shader = shader;}
 
-    public void renderObject(GameObject object) {
+    public void renderObject(GameObject object, Camera camera) {
         GL30.glBindVertexArray(object.getMesh().getVAO());
         GL30.glEnableVertexAttribArray(0);
         GL30.glEnableVertexAttribArray(1);
@@ -26,6 +29,8 @@ public class Renderer {
 
         shader.bind();
         shader.setUniform("model", Matrix4.transform(object.getPosition(), object.getRotation(), object.getScale()));
+        shader.setUniform("view", Matrix4.view(camera.getPosition(), camera.getRotation()));
+        shader.setUniform("projection", window.getProjectionMatrix());
         GL11.glDrawElements(GL11.GL_TRIANGLES, object.getMesh().getIndices().length, GL11.GL_UNSIGNED_INT, 0);
         shader.unbind();
 

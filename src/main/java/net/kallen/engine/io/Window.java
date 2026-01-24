@@ -1,5 +1,6 @@
 package main.java.net.kallen.engine.io;
 
+import main.java.net.kallen.engine.math.Matrix4;
 import main.java.net.kallen.engine.math.Vector3;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -17,6 +18,8 @@ public class Window {
     private Vector3 bgColor = new Vector3(0, 0, 0);
     private boolean isResized;
     private boolean isFullscreen;
+    private Matrix4 projection;
+    private boolean mouseLock;
 
     public int frames;
     public static long time;
@@ -28,6 +31,8 @@ public class Window {
         this.width = width;
         this.height = height;
         this.title = title;
+        projection = Matrix4.projection(70f, (float) width / (float) height, 0.1f, 1000f);
+        mouseLock = false;
     }
 
     public void create() {
@@ -129,6 +134,15 @@ public class Window {
         }
     }
 
+    public void mouseState(boolean lock) {
+        mouseLock = lock;
+        GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, lock ? GLFW.GLFW_CURSOR_DISABLED : GLFW.GLFW_CURSOR_NORMAL);
+    }
+
+    public boolean getMouseLock() {
+        return mouseLock;
+    }
+
     public int getWidth() {
         return width;
     }
@@ -143,6 +157,10 @@ public class Window {
 
     public long getWindow() {
         return window;
+    }
+
+    public Matrix4 getProjectionMatrix() {
+        return projection;
     }
 
 }

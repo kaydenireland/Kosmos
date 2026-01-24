@@ -1,5 +1,7 @@
 package main.java.net.kallen.engine.math;
 
+import java.util.Arrays;
+
 public class Matrix4 {
 
     public static final int SIZE = 4;
@@ -20,9 +22,9 @@ public class Matrix4 {
     public static Matrix4 translate(Vector3 translate) {
         Matrix4 result = Matrix4.identity();
 
-        result.set(0, 3, translate.getX());
-        result.set(1, 3, translate.getY());
-        result.set(2, 3, translate.getZ());
+        result.set(3, 0, translate.getX());
+        result.set(3, 1, translate.getY());
+        result.set(3, 2, translate.getZ());
 
         return result;
     }
@@ -88,6 +90,38 @@ public class Matrix4 {
         return result;
     }
 
+    public static Matrix4 projection(float fov, float aspect, float near, float far) {
+        Matrix4 result = Matrix4.identity();
+
+        float tanFOV = (float) Math.tan(Math.toRadians(fov / 2));
+        float range = far - near;
+
+        result.set(0, 0, 1.0f / (aspect * tanFOV));
+        result.set(1, 1, 1.0f / tanFOV);
+        result.set(2, 2, -((far + near) / range));
+        result.set(2, 3, -1.0f);
+        result.set(3, 2, -((2 * far * near) / range));
+        result.set(3, 3, 0.0f);
+
+        return result;
+    }
+
+    public static Matrix4 view(Vector3 position, Vector3 rotation) {
+        Matrix4 result;
+
+        Vector3 negative = new Vector3(-position.getX(), -position.getY(), -position.getZ());
+        Matrix4 translationMatrix = Matrix4.translate(negative);
+        Matrix4 rotXMatrix = Matrix4.rotate(rotation.getX(), new Vector3(1, 0, 0));
+        Matrix4 rotYMatrix = Matrix4.rotate(rotation.getY(), new Vector3(0, 1, 0));
+        Matrix4 rotZMatrix = Matrix4.rotate(rotation.getZ(), new Vector3(0, 0, 1));
+
+        Matrix4 rotationMatrix = Matrix4.multiply(rotZMatrix, Matrix4.multiply(rotYMatrix, rotXMatrix));
+
+        result = Matrix4.multiply(translationMatrix, rotationMatrix);
+
+        return result;
+    }
+
     public float get(int x, int y) {
         return elements[y * SIZE + x];
     }
@@ -98,6 +132,26 @@ public class Matrix4 {
 
     public float[] getAll() {
         return elements;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Arrays.hashCode(elements);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Matrix4 other = (Matrix4) obj;
+        return Arrays.equals(elements, other.elements);
     }
 
 }
