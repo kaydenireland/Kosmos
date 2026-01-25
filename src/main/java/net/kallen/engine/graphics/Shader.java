@@ -59,6 +59,8 @@ public class Shader {
 
     }
 
+
+
     public int getUniformLocation(String name) {
         return GL20.glGetUniformLocation(programID, name);
     }

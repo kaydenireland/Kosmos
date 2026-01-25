@@ -19,70 +19,45 @@ public class Kosmos implements Runnable {
     private boolean thirdPerson = false;
 
     public Mesh mesh = new Mesh(new Vertex[] {
-            //Back face
+            // Back face
             new Vertex(new Vector3(-0.5f,  0.5f, -0.5f), new Vector2(0.0f, 0.0f)),
             new Vertex(new Vector3(-0.5f, -0.5f, -0.5f), new Vector2(0.0f, 1.0f)),
             new Vertex(new Vector3( 0.5f, -0.5f, -0.5f), new Vector2(1.0f, 1.0f)),
             new Vertex(new Vector3( 0.5f,  0.5f, -0.5f), new Vector2(1.0f, 0.0f)),
 
-            //Front face
+            // Front face
             new Vertex(new Vector3(-0.5f,  0.5f,  0.5f), new Vector2(0.0f, 0.0f)),
             new Vertex(new Vector3(-0.5f, -0.5f,  0.5f), new Vector2(0.0f, 1.0f)),
             new Vertex(new Vector3( 0.5f, -0.5f,  0.5f), new Vector2(1.0f, 1.0f)),
             new Vertex(new Vector3( 0.5f,  0.5f,  0.5f), new Vector2(1.0f, 0.0f)),
 
-            //Right face
+            // Right face
             new Vertex(new Vector3( 0.5f,  0.5f, -0.5f), new Vector2(0.0f, 0.0f)),
             new Vertex(new Vector3( 0.5f, -0.5f, -0.5f), new Vector2(0.0f, 1.0f)),
             new Vertex(new Vector3( 0.5f, -0.5f,  0.5f), new Vector2(1.0f, 1.0f)),
             new Vertex(new Vector3( 0.5f,  0.5f,  0.5f), new Vector2(1.0f, 0.0f)),
 
-            //Left face
+            // Left face
             new Vertex(new Vector3(-0.5f,  0.5f, -0.5f), new Vector2(0.0f, 0.0f)),
             new Vertex(new Vector3(-0.5f, -0.5f, -0.5f), new Vector2(0.0f, 1.0f)),
             new Vertex(new Vector3(-0.5f, -0.5f,  0.5f), new Vector2(1.0f, 1.0f)),
             new Vertex(new Vector3(-0.5f,  0.5f,  0.5f), new Vector2(1.0f, 0.0f)),
 
-            //Top face
+            // Top face
             new Vertex(new Vector3(-0.5f,  0.5f,  0.5f), new Vector2(0.0f, 0.0f)),
             new Vertex(new Vector3(-0.5f,  0.5f, -0.5f), new Vector2(0.0f, 1.0f)),
             new Vertex(new Vector3( 0.5f,  0.5f, -0.5f), new Vector2(1.0f, 1.0f)),
             new Vertex(new Vector3( 0.5f,  0.5f,  0.5f), new Vector2(1.0f, 0.0f)),
 
-            //Bottom face
+            // Bottom face
             new Vertex(new Vector3(-0.5f, -0.5f,  0.5f), new Vector2(0.0f, 0.0f)),
             new Vertex(new Vector3(-0.5f, -0.5f, -0.5f), new Vector2(0.0f, 1.0f)),
             new Vertex(new Vector3( 0.5f, -0.5f, -0.5f), new Vector2(1.0f, 1.0f)),
             new Vertex(new Vector3( 0.5f, -0.5f,  0.5f), new Vector2(1.0f, 0.0f)),
-    }, new int[] {
-            //Back face
-            0, 1, 3,
-            3, 1, 2,
+    }, Faces.CUBE, new Material("/main/resources/textures/cat.png"));
 
-            //Front face
-            4, 5, 7,
-            7, 5, 6,
+    public GameObject[][][] objects = new GameObject[16][16][16];
 
-            //Right face
-            8, 9, 11,
-            11, 9, 10,
-
-            //Left face
-            12, 13, 15,
-            15, 13, 14,
-
-            //Top face
-            16, 17, 19,
-            19, 17, 18,
-
-            //Bottom face
-            20, 21, 23,
-            23, 21, 22
-    }, new Material("/main/resources/textures/cat.png"));
-
-    public GameObject[] objects = new GameObject[500];
-
-    public GameObject object = new GameObject(new Vector3(0f,0f,0f), new Vector3(0f,0f,0f), new Vector3(1f,1f,1f), mesh);
 
     public Camera camera = new Camera(new Vector3(0f, 0f, 1f), new Vector3(0f, 0f,0f));
 
@@ -95,7 +70,7 @@ public class Kosmos implements Runnable {
         System.out.println("Initializing Game");
         window = new Window(WIDTH, HEIGHT, "Window");
         shader = new Shader("/main/resources/shaders/mainVertex.txt", "/main/resources/shaders/mainFragment.txt");
-        renderer = new Renderer(window, shader);
+        renderer = new Renderer(window, shader, camera);
         window.setBackgroundColor(0f, .1f, .1f);
         // window.setFullscreen(true);
         window.create();
@@ -103,9 +78,17 @@ public class Kosmos implements Runnable {
         mesh.create();
         shader.create();
 
-        objects[0] = object;
-        for (int i = 1; i < objects.length; i++) {
-            objects[i] = new GameObject(new Vector3((float) (Math.random() * 50 - 25), (float) (Math.random() * 50 - 25), (float) (Math.random() * 50 - 25)), new Vector3(0, 0, 0), new Vector3(1, 1, 1), mesh);
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                for (int z = 0; z < 16; z++) {
+                    objects[x][y][z] = new GameObject(
+                            new Vector3(x, y, z),
+                            new Vector3(0f, 0f, 0f),
+                            new Vector3(1f, 1f, 1f),
+                            mesh
+                    );
+                }
+            }
         }
 
     }
@@ -127,16 +110,16 @@ public class Kosmos implements Runnable {
 
     private void update() {
         window.update();
-        if (thirdPerson) {
-            camera.update(object);
-        } else {
-            camera.update();
-        }
+        camera.update();
     }
 
     private void render() {
-        for (GameObject gameObject : objects) {
-            renderer.renderObject(gameObject, camera);
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                for (int z = 0; z < 16; z++) {
+                    renderer.renderObject(objects[x][y][z]);
+                }
+            }
         }
         window.swapBuffers();
     }

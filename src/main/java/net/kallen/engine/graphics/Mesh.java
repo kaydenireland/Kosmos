@@ -14,7 +14,7 @@ public class Mesh {
     private Vertex[] vertices;
     private int[] indices;
     private Material material;
-    private int vao, pbo, ibo, cbo, tbo;
+    private int vao, pbo, ibo, tbo;
 
     public Mesh(Vertex[] vertices, int[] indices, Material material) {
         this.vertices = vertices;
@@ -69,7 +69,6 @@ public class Mesh {
 
     public void destroy() {
         GL15.glDeleteBuffers(pbo);
-        GL15.glDeleteBuffers(cbo);
         GL15.glDeleteBuffers(ibo);
         GL15.glDeleteBuffers(tbo);
 
@@ -94,9 +93,6 @@ public class Mesh {
         return pbo;
     }
 
-    public int getCBO() {
-        return cbo;
-    }
 
     public int getTBO() {
         return tbo;

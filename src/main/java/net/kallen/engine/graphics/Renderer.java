@@ -13,12 +13,15 @@ public class Renderer {
 
     private Window window;
     private Shader shader;
+    private Camera camera;
 
-    public Renderer(Window window, Shader shader) {
+    public Renderer(Window window, Shader shader, Camera camera) {
         this.window = window;
-        this.shader = shader;}
+        this.shader = shader;
+        this.camera = camera;
+    }
 
-    public void renderObject(GameObject object, Camera camera) {
+    public void renderObject(GameObject object) {
         GL30.glBindVertexArray(object.getMesh().getVAO());
         GL30.glEnableVertexAttribArray(0);
         GL30.glEnableVertexAttribArray(1);
