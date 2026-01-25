@@ -9,6 +9,8 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
 
+import static org.lwjgl.opengl.GL11.glBlendFunc;
+
 public class Renderer {
 
     private Window window;
@@ -31,9 +33,18 @@ public class Renderer {
         GL13.glBindTexture(GL11.GL_TEXTURE_2D, object.getMesh().getMaterial().getTextureID());
 
         shader.bind();
+
+        // Allow transparency in pngs
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glAlphaFunc(GL11.GL_GREATER, 0.1f);
+
+        // Uniforms
         shader.setUniform("model", Matrix4.transform(object.getPosition(), object.getRotation(), object.getScale()));
         shader.setUniform("view", Matrix4.view(camera.getPosition(), camera.getRotation()));
         shader.setUniform("projection", window.getProjectionMatrix());
+
         GL11.glDrawElements(GL11.GL_TRIANGLES, object.getMesh().getIndices().length, GL11.GL_UNSIGNED_INT, 0);
         shader.unbind();
 
