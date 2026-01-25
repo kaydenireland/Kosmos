@@ -2,20 +2,18 @@ package main.java.net.kallen.kosmos.world;
 
 public class Block {
 
-    private boolean isActive;
-    private BlockId id;
+    private boolean dirty;
 
-    public Block(BlockId id) {
-        isActive = false;
-        this.id = id;
+    public Block(BlockProperties properties) {
+        dirty = false;
     }
 
-    public boolean isActive() {
-        return isActive;
+    public boolean isDirty() {
+        return dirty;
     }
 
-    public void setActive(boolean isActive) {
-        this.isActive = isActive;
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
 
 }

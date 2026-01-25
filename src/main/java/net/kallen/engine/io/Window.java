@@ -58,7 +58,7 @@ public class Window {
 
         createCallbacks();
 
-        GLFW.glfwSwapInterval(1);   // Caps window at 60fps
+        GLFW.glfwSwapInterval(10);   // Caps window at 60fps
 
         time = System.currentTimeMillis();
 
