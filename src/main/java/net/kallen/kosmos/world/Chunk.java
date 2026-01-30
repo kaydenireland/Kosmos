@@ -194,10 +194,10 @@ public class Chunk {
     }
 
     private void addFace(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3) {
-        vertices.add(new Vertex(v0, new Vector2(uvs[0], uvs[3])));
-        vertices.add(new Vertex(v1, new Vector2(uvs[0], uvs[1])));
-        vertices.add(new Vertex(v2, new Vector2(uvs[2], uvs[1])));
-        vertices.add(new Vertex(v3, new Vector2(uvs[2], uvs[3])));
+        vertices.add(new Vertex(v0, new Vector2(uvs[0], uvs[1])));
+        vertices.add(new Vertex(v1, new Vector2(uvs[0], uvs[3])));
+        vertices.add(new Vertex(v2, new Vector2(uvs[2], uvs[3])));
+        vertices.add(new Vertex(v3, new Vector2(uvs[2], uvs[1])));
 
         indices.add(offset);
         indices.add(offset + 1);
