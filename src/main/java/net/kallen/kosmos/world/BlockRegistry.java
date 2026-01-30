@@ -14,7 +14,7 @@ public class BlockRegistry {
 
     // Block type IDs
     public static final byte AIR = register("air", new Block(
-            BlockProperties.create()));
+            BlockProperties.create().transparent().solid(false)));
     public static final byte DIRT = register("dirt", new Block(
             BlockProperties.create()));
     public static final byte STONE = register("stone", new Block(
@@ -40,6 +40,15 @@ public class BlockRegistry {
 
     public static byte getIdFromName(String name) {
         return NAME_TO_ID.get(name);
+    }
+
+    public static String getNameFromId(Byte id) {
+        for (Map.Entry<String, Byte> entry : NAME_TO_ID.entrySet()) {
+            if (entry.getValue().equals(id)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     public static String[] getAllTextures() {

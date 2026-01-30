@@ -21,6 +21,12 @@ public class Material {
         this.path = path;
     }
 
+    public Material(int textureID, int width, int height) {
+        this.textureID = textureID;
+        this.width = width;
+        this.height = height;
+    }
+
     public void create() {
         try (InputStream is = Material.class.getResourceAsStream(path)) {
             if (is == null) {

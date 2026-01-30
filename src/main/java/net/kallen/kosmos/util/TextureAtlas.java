@@ -15,6 +15,7 @@ public class TextureAtlas {
 
     private int textureID;
     private int gridSize;
+    private int atlasPixels;
     private final int textureSize;
     private Map<String, Vector2> textureLocations = new HashMap<>();
 
@@ -26,7 +27,7 @@ public class TextureAtlas {
     }
 
       private void build(String[] paths) {
-        int atlasPixels = gridSize * textureSize;
+        atlasPixels = gridSize * textureSize;
         ByteBuffer atlasBuffer = BufferUtils.createByteBuffer(atlasPixels * atlasPixels * 4);
 
         // Fill with transparent black
@@ -46,7 +47,8 @@ public class TextureAtlas {
                 copyToAtlas(atlasBuffer, textureData, gridX * textureSize, gridY * textureSize, atlasPixels);
 
                 // Store position
-                textureLocations.put(paths[i], new Vector2(gridX, gridY));
+                String key = paths[i].substring(paths[i].lastIndexOf("/") + 1).replace(".png", "");
+                textureLocations.put(key, new Vector2(gridX, gridY));
 
                 STBImage.stbi_image_free(textureData);
                 System.out.println("Added " + paths[i] + " to atlas at (" + gridX + ", " + gridY + ")");
@@ -90,12 +92,17 @@ public class TextureAtlas {
         return textureID;
     }
 
+    public int getGridSize() {
+        return gridSize;
+    }
+
     public Vector2 getPosition(String name) {
         return textureLocations.getOrDefault(name, new Vector2(0, 0));
     }
 
     public float[] getUVs(String name) {
         Vector2 pos = getPosition(name);
+        // System.out.println(pos.getX() + " " + pos.getY());
         float pixelSize = 1.0f / gridSize;
 
         float u0 = pos.getX() * pixelSize;
@@ -103,12 +110,11 @@ public class TextureAtlas {
         float u1 = (pos.getX() + 1) * pixelSize;
         float v1 = (pos.getY() + 1) * pixelSize;
 
-        // Padding
-        float texel = 1.0f / (gridSize * textureSize);
-        u0 += texel * 0.5f;
-        v0 += texel * 0.5f;
-        u1 -= texel * 0.5f;
-        v1 -= texel * 0.5f;
+        float padding = 0.5f / atlasPixels;
+        u0 += padding;
+        v0 += padding;
+        u1 -= padding;
+        v1 -= padding;
 
 
         return new float[] { u0, v0, u1, v1 };

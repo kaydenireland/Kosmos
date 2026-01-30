@@ -22,7 +22,7 @@ public class Kosmos implements Runnable {
     private boolean thirdPerson = false;
 
     public Chunk chunk;
-    public TextureAtlas blockAtlas;
+    public static TextureAtlas blockAtlas;
 
     public Camera camera = new Camera(new Vector3(0f, 0f, 1f), new Vector3(0f, 0f,0f));
 
@@ -47,7 +47,7 @@ public class Kosmos implements Runnable {
         shader.create();
 
         blockAtlas = new TextureAtlas(16, BlockRegistry.getAllTextures());
-        chunk = new Chunk();
+        chunk = new Chunk(blockAtlas);
         chunk.generateMesh();
 
     }

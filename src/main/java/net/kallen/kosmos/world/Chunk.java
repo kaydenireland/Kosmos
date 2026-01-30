@@ -1,14 +1,13 @@
 package main.java.net.kallen.kosmos.world;
 
-import main.java.net.kallen.engine.graphics.Material;
 import main.java.net.kallen.engine.graphics.Mesh;
 import main.java.net.kallen.engine.graphics.Renderer;
 import main.java.net.kallen.engine.graphics.Vertex;
 import main.java.net.kallen.engine.math.ByteArray3D;
 import main.java.net.kallen.engine.math.Vector2;
 import main.java.net.kallen.engine.math.Vector3;
-import main.java.net.kallen.kosmos.Kosmos;
-import main.java.net.kallen.kosmos.util.ResourceLocation;
+import main.java.net.kallen.kosmos.util.AtlasMaterial;
+import main.java.net.kallen.kosmos.util.TextureAtlas;
 
 import java.util.ArrayList;
 
@@ -17,16 +16,23 @@ public class Chunk {
     private final int CHUNK_SIZE = 16;
     private ByteArray3D blocks;
     public Mesh mesh;
+    private final ArrayList<Vertex> vertices = new ArrayList<>();
+    private final ArrayList<Integer> indices = new ArrayList<>();
+    private int offset;
+    private float[] uvs;
+    private final TextureAtlas atlas;
     private boolean dirty;
 
-    public Chunk() {
+    public Chunk(TextureAtlas atlas) {
+        this.atlas = atlas;
+
         blocks = new ByteArray3D(CHUNK_SIZE);
         for (int x = 0; x < CHUNK_SIZE; x++) {
             for (int y = 0; y < CHUNK_SIZE; y++) {
                 for (int z = 0; z < CHUNK_SIZE; z++) {
-                    if (y == 0) blocks.set(x, y, z, (byte) 0);
-                    else if (y == 1) blocks.set(x, y, z, (byte) 3);
-                    else if (y == 2) blocks.set(x, y, z, (byte) 1);
+                    if (y == 15) blocks.set(x, y, z, (byte) 0);
+                    else if (y == 14) blocks.set(x, y, z, (byte) 3);
+                    else if (y == 13) blocks.set(x, y, z, (byte) 3);
                     else blocks.set(x, y, z, (byte) 2);
                 }
             }
@@ -55,9 +61,9 @@ public class Chunk {
     }
 
     public void generateMesh() {
-        ArrayList<Vertex> vertices = new ArrayList<>();
-        ArrayList<Integer> indices = new ArrayList<>();
-        int offset = 0;
+        vertices.clear();
+        indices.clear();
+        offset = 0;
         byte blockId;
 
         for (int x = 0; x < CHUNK_SIZE; x++) {
@@ -67,100 +73,76 @@ public class Chunk {
 
                     if (blockId == BlockRegistry.AIR) continue;
 
+                    uvs = atlas.getUVs(BlockRegistry.getNameFromId(blockId));
+
                     if (shouldRenderFace(new Vector3(x, y, z), Direction.NORTH)) {
 
-                        vertices.add(new Vertex(new Vector3(x, y+ 1, z), new Vector2(0, 1)));
-                        vertices.add(new Vertex(new Vector3(x, y, z), new Vector2(0, 0)));
-                        vertices.add(new Vertex(new Vector3(x + 1, y, z), new Vector2(1, 0)));
-                        vertices.add(new Vertex(new Vector3(x + 1, y + 1, z), new Vector2(1, 1)));
-
-                        indices.add(offset);
-                        indices.add(offset + 1);
-                        indices.add(offset + 3);
-
-                        indices.add(offset + 3);
-                        indices.add(offset + 1);
-                        indices.add(offset + 2);
+                        addFace(
+                                new Vector3(x,y + 1, z),
+                                new Vector3(x, y, z),
+                                new Vector3(x + 1, y, z),
+                                new Vector3(x + 1, y + 1, z)
+                        );
 
                         offset += 4;
                     }
 
                     if (shouldRenderFace(new Vector3(x, y, z), Direction.SOUTH)) {
-                        vertices.add(new Vertex(new Vector3(x + 1, y + 1, z + 1), new Vector2(0, 1)));
-                        vertices.add(new Vertex(new Vector3(x + 1, y, z + 1), new Vector2(0, 0)));
-                        vertices.add(new Vertex(new Vector3(x, y, z + 1), new Vector2(1, 0)));
-                        vertices.add(new Vertex(new Vector3(x, y + 1, z + 1), new Vector2(1, 1)));
 
-                        indices.add(offset);
-                        indices.add(offset + 1);
-                        indices.add(offset + 3);
-                        indices.add(offset + 3);
-                        indices.add(offset + 1);
-                        indices.add(offset + 2);
+                        addFace(
+                                new Vector3(x + 1, y + 1, z + 1),
+                                new Vector3(x + 1, y, z + 1),
+                                new Vector3(x, y, z + 1),
+                                new Vector3(x, y + 1, z + 1)
+                        );
 
                         offset += 4;
                     }
 
                     if (shouldRenderFace(new Vector3(x, y, z), Direction.EAST)) {
-                        vertices.add(new Vertex(new Vector3(x + 1, y + 1, z), new Vector2(0, 1)));
-                        vertices.add(new Vertex(new Vector3(x + 1, y, z), new Vector2(0, 0)));
-                        vertices.add(new Vertex(new Vector3(x + 1, y, z + 1), new Vector2(1, 0)));
-                        vertices.add(new Vertex(new Vector3(x + 1, y + 1, z + 1), new Vector2(1, 1)));
 
-                        indices.add(offset);
-                        indices.add(offset + 1);
-                        indices.add(offset + 3);
-                        indices.add(offset + 3);
-                        indices.add(offset + 1);
-                        indices.add(offset + 2);
+                        addFace(
+                                new Vector3(x + 1, y + 1, z),
+                                new Vector3(x + 1, y, z),
+                                new Vector3(x + 1, y, z + 1),
+                                new Vector3(x + 1, y + 1, z + 1)
+                        );
 
                         offset += 4;
                     }
 
                     if (shouldRenderFace(new Vector3(x, y, z), Direction.WEST)) {
-                        vertices.add(new Vertex(new Vector3(x, y + 1, z + 1), new Vector2(0, 1)));
-                        vertices.add(new Vertex(new Vector3(x, y, z + 1), new Vector2(0, 0)));
-                        vertices.add(new Vertex(new Vector3(x, y, z), new Vector2(1, 0)));
-                        vertices.add(new Vertex(new Vector3(x, y + 1, z), new Vector2(1, 1)));
 
-                        indices.add(offset);
-                        indices.add(offset + 1);
-                        indices.add(offset + 3);
-                        indices.add(offset + 3);
-                        indices.add(offset + 1);
-                        indices.add(offset + 2);
+                        addFace(
+                                new Vector3(x, y + 1, z + 1),
+                                new Vector3(x, y, z + 1),
+                                new Vector3(x, y, z),
+                                new Vector3(x, y + 1, z)
+                        );
 
                         offset += 4;
                     }
 
                     if (shouldRenderFace(new Vector3(x, y, z), Direction.ABOVE)) {
-                        vertices.add(new Vertex(new Vector3(x, y + 1, z), new Vector2(0, 1)));
-                        vertices.add(new Vertex(new Vector3(x, y + 1, z + 1), new Vector2(0, 0)));
-                        vertices.add(new Vertex(new Vector3(x + 1, y + 1, z + 1), new Vector2(1, 0)));
-                        vertices.add(new Vertex(new Vector3(x + 1, y + 1, z), new Vector2(1, 1)));
 
-                        indices.add(offset);
-                        indices.add(offset + 1);
-                        indices.add(offset + 3);
-                        indices.add(offset + 3);
-                        indices.add(offset + 1);
-                        indices.add(offset + 2);
+                        addFace(
+                                new Vector3(x, y + 1, z),
+                                new Vector3(x, y + 1, z + 1),
+                                new Vector3(x + 1, y + 1, z + 1),
+                                new Vector3(x + 1, y + 1, z)
+                        );
 
                         offset += 4;
                     }
 
                     if (shouldRenderFace(new Vector3(x, y, z), Direction.BELOW)) {
-                        vertices.add(new Vertex(new Vector3(x, y, z + 1), new Vector2(0, 1)));
-                        vertices.add(new Vertex(new Vector3(x, y, z), new Vector2(0, 0)));
-                        vertices.add(new Vertex(new Vector3(x + 1, y, z), new Vector2(1, 0)));
-                        vertices.add(new Vertex(new Vector3(x + 1, y, z + 1), new Vector2(1, 1)));
 
-                        indices.add(offset);
-                        indices.add(offset + 1);
-                        indices.add(offset + 3);
-                        indices.add(offset + 3);
-                        indices.add(offset + 1);
-                        indices.add(offset + 2);
+                        addFace(
+                                new Vector3(x, y, z + 1),
+                                new Vector3(x, y, z),
+                                new Vector3(x + 1, y, z),
+                                new Vector3(x + 1, y, z + 1)
+                        );
 
                         offset += 4;
                     }
@@ -169,11 +151,16 @@ public class Chunk {
             }
         }
 
-        ResourceLocation location = ResourceLocation.fromNamespaceAndDirectory(Kosmos.ID, ResourceLocation.BLOCK_TEXTURES, "glass");
         mesh = new Mesh(
                 vertices.toArray(new Vertex[0]),
                 indices.stream().mapToInt(i -> i).toArray(),
-                new Material(location.toImagePath())
+                new AtlasMaterial(
+                        atlas.getTextureID(),
+                        atlas.getGridSize(),
+                        atlas.getGridSize()
+                )
+                // TODO: ChunkMesh Class
+                // TODO: World Class/ChunkManager
         );
 
         mesh.create();
@@ -198,5 +185,20 @@ public class Chunk {
         return !neighbor.isOpaque();
 
     }
+
+    private void addFace(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3) {
+        vertices.add(new Vertex(v0, new Vector2(uvs[0], uvs[3])));
+        vertices.add(new Vertex(v1, new Vector2(uvs[0], uvs[1])));
+        vertices.add(new Vertex(v2, new Vector2(uvs[2], uvs[1])));
+        vertices.add(new Vertex(v3, new Vector2(uvs[2], uvs[3])));
+
+        indices.add(offset);
+        indices.add(offset + 1);
+        indices.add(offset + 3);
+        indices.add(offset + 3);
+        indices.add(offset + 1);
+        indices.add(offset + 2);
+    }
+
 
 }
