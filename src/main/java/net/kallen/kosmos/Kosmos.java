@@ -3,15 +3,17 @@ package main.java.net.kallen.kosmos;
 import main.java.net.kallen.engine.graphics.*;
 import main.java.net.kallen.engine.io.Input;
 import main.java.net.kallen.engine.io.Window;
-import main.java.net.kallen.engine.math.Vector2;
 import main.java.net.kallen.engine.math.Vector3;
 import main.java.net.kallen.engine.objects.Camera;
-import main.java.net.kallen.engine.objects.GameObject;
+import main.java.net.kallen.kosmos.util.ResourceLocation;
+import main.java.net.kallen.kosmos.util.TextureAtlas;
+import main.java.net.kallen.kosmos.world.BlockRegistry;
 import main.java.net.kallen.kosmos.world.Chunk;
 import org.lwjgl.glfw.GLFW;
 
 public class Kosmos implements Runnable {
 
+    public static final String ID = "kosmos";
     public Thread gameThread;
     public Window window;
     public Renderer renderer;
@@ -20,6 +22,7 @@ public class Kosmos implements Runnable {
     private boolean thirdPerson = false;
 
     public Chunk chunk;
+    public TextureAtlas blockAtlas;
 
     public Camera camera = new Camera(new Vector3(0f, 0f, 1f), new Vector3(0f, 0f,0f));
 
@@ -29,9 +32,13 @@ public class Kosmos implements Runnable {
     }
 
     public void init() {
+
         System.out.println("Initializing Game");
         window = new Window(WIDTH, HEIGHT, "Window");
-        shader = new Shader("/main/resources/shaders/mainVertex.txt", "/main/resources/shaders/mainFragment.txt");
+        shader = new Shader(
+                ResourceLocation.fromNamespaceAndDirectory(Kosmos.ID, ResourceLocation.SHADERS, "mainVertex").toFilePath(".txt"),
+                ResourceLocation.fromNamespaceAndDirectory(Kosmos.ID, ResourceLocation.SHADERS, "mainFragment").toFilePath(".txt")
+        );
         renderer = new Renderer(window, shader, camera);
         window.setBackgroundColor(0f, .1f, .1f);
         // window.setFullscreen(true);
@@ -39,6 +46,7 @@ public class Kosmos implements Runnable {
         window.mouseState(true);
         shader.create();
 
+        blockAtlas = new TextureAtlas(16, BlockRegistry.getAllTextures());
         chunk = new Chunk();
         chunk.generateMesh();
 
@@ -74,6 +82,7 @@ public class Kosmos implements Runnable {
         window.destroy();
         shader.destroy();
         chunk.mesh.destroy();
+        blockAtlas.destroy();
     }
 
     public static void main(String[] args) {

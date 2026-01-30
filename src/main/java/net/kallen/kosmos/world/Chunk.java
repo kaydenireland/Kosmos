@@ -7,6 +7,8 @@ import main.java.net.kallen.engine.graphics.Vertex;
 import main.java.net.kallen.engine.math.ByteArray3D;
 import main.java.net.kallen.engine.math.Vector2;
 import main.java.net.kallen.engine.math.Vector3;
+import main.java.net.kallen.kosmos.Kosmos;
+import main.java.net.kallen.kosmos.util.ResourceLocation;
 
 import java.util.ArrayList;
 
@@ -22,7 +24,10 @@ public class Chunk {
         for (int x = 0; x < CHUNK_SIZE; x++) {
             for (int y = 0; y < CHUNK_SIZE; y++) {
                 for (int z = 0; z < CHUNK_SIZE; z++) {
-                    blocks.set(x, y, z, (byte) 1);
+                    if (y == 0) blocks.set(x, y, z, (byte) 0);
+                    else if (y == 1) blocks.set(x, y, z, (byte) 3);
+                    else if (y == 2) blocks.set(x, y, z, (byte) 1);
+                    else blocks.set(x, y, z, (byte) 2);
                 }
             }
         }
@@ -42,6 +47,11 @@ public class Chunk {
 
     public byte getBlock(int x, int y, int z) {
         return blocks.get(x, y, z);
+    }
+
+    public void setBlock(int x, int y, int z, byte blockId) {
+        blocks.set(x, y, z, blockId);
+        dirty = true;
     }
 
     public void generateMesh() {
@@ -159,10 +169,11 @@ public class Chunk {
             }
         }
 
+        ResourceLocation location = ResourceLocation.fromNamespaceAndDirectory(Kosmos.ID, ResourceLocation.BLOCK_TEXTURES, "glass");
         mesh = new Mesh(
                 vertices.toArray(new Vertex[0]),
                 indices.stream().mapToInt(i -> i).toArray(),
-                new Material("/main/resources/textures/block/glass.png")
+                new Material(location.toImagePath())
         );
 
         mesh.create();

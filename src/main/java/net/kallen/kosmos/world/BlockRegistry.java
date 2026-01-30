@@ -1,5 +1,9 @@
 package main.java.net.kallen.kosmos.world;
 
+import main.java.net.kallen.kosmos.Kosmos;
+import main.java.net.kallen.kosmos.util.ResourceLocation;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +40,22 @@ public class BlockRegistry {
 
     public static byte getIdFromName(String name) {
         return NAME_TO_ID.get(name);
+    }
+
+    public static String[] getAllTextures() {
+
+        ArrayList<String> list = new ArrayList<>();
+
+        for (String name : NAME_TO_ID.keySet()) {
+            ResourceLocation location = ResourceLocation.fromNamespaceAndDirectory(
+                    Kosmos.ID,
+                    ResourceLocation.BLOCK_TEXTURES,
+                    name
+            );
+            list.add(location.toImagePath());
+        }
+
+        return list.toArray(new String[0]);
     }
 
 }
