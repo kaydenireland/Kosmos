@@ -75,7 +75,7 @@ public class Chunk {
 
                     uvs = atlas.getUVs(BlockRegistry.getNameFromId(blockId));
 
-                    if (shouldRenderFace(new Vector3(x, y, z), Direction.NORTH)) {
+                    if (shouldRenderFace(blockId, new Vector3(x, y, z), Direction.NORTH)) {
 
                         addFace(
                                 new Vector3(x,y + 1, z),
@@ -87,7 +87,7 @@ public class Chunk {
                         offset += 4;
                     }
 
-                    if (shouldRenderFace(new Vector3(x, y, z), Direction.SOUTH)) {
+                    if (shouldRenderFace(blockId, new Vector3(x, y, z), Direction.SOUTH)) {
 
                         addFace(
                                 new Vector3(x + 1, y + 1, z + 1),
@@ -99,7 +99,7 @@ public class Chunk {
                         offset += 4;
                     }
 
-                    if (shouldRenderFace(new Vector3(x, y, z), Direction.EAST)) {
+                    if (shouldRenderFace(blockId, new Vector3(x, y, z), Direction.EAST)) {
 
                         addFace(
                                 new Vector3(x + 1, y + 1, z),
@@ -111,7 +111,7 @@ public class Chunk {
                         offset += 4;
                     }
 
-                    if (shouldRenderFace(new Vector3(x, y, z), Direction.WEST)) {
+                    if (shouldRenderFace(blockId, new Vector3(x, y, z), Direction.WEST)) {
 
                         addFace(
                                 new Vector3(x, y + 1, z + 1),
@@ -123,7 +123,7 @@ public class Chunk {
                         offset += 4;
                     }
 
-                    if (shouldRenderFace(new Vector3(x, y, z), Direction.ABOVE)) {
+                    if (shouldRenderFace(blockId, new Vector3(x, y, z), Direction.ABOVE)) {
 
                         addFace(
                                 new Vector3(x, y + 1, z),
@@ -135,7 +135,7 @@ public class Chunk {
                         offset += 4;
                     }
 
-                    if (shouldRenderFace(new Vector3(x, y, z), Direction.BELOW)) {
+                    if (shouldRenderFace(blockId, new Vector3(x, y, z), Direction.BELOW)) {
 
                         addFace(
                                 new Vector3(x, y, z + 1),
@@ -168,7 +168,7 @@ public class Chunk {
 
     }
 
-    private boolean shouldRenderFace(Vector3 pos, Vector3 dir) {
+    private boolean shouldRenderFace(byte currentId, Vector3 pos, Vector3 dir) {
         int nx = (int) (pos.getX() + dir.getX());
         int ny = (int) (pos.getY() + dir.getY());
         int nz = (int) (pos.getZ() + dir.getZ());
@@ -181,9 +181,16 @@ public class Chunk {
         }
 
         byte neighborId = getBlock(nx, ny, nz);
-        Block neighbor = BlockRegistry.getBlockFromId(neighborId);
-        return !neighbor.isOpaque();
 
+        if (neighborId == BlockRegistry.AIR) return true;
+
+        Block currentBlock = BlockRegistry.getBlockFromId(currentId);
+        Block neighborBlock = BlockRegistry.getBlockFromId(neighborId);
+
+        if (neighborBlock.isOpaque()) return false;
+
+        // If block is same type, cull
+        return currentBlock.isOpaque() || currentId != neighborId;
     }
 
     private void addFace(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3) {
