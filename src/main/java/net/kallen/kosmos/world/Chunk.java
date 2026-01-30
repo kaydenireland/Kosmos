@@ -32,7 +32,7 @@ public class Chunk {
                 for (int z = 0; z < CHUNK_SIZE; z++) {
                     if (y == 15) blocks.set(x, y, z, (byte) 0);
                     else if (y == 14) blocks.set(x, y, z, (byte) 3);
-                    else if (y == 13) blocks.set(x, y, z, (byte) 3);
+                    else if (y == 13) blocks.set(x, y, z, (byte) 1);
                     else blocks.set(x, y, z, (byte) 2);
                 }
             }
@@ -78,10 +78,10 @@ public class Chunk {
                     if (shouldRenderFace(blockId, new Vector3(x, y, z), Direction.NORTH)) {
 
                         addFace(
-                                new Vector3(x,y + 1, z),
-                                new Vector3(x, y, z),
+                                new Vector3(x + 1,y + 1, z),
                                 new Vector3(x + 1, y, z),
-                                new Vector3(x + 1, y + 1, z)
+                                new Vector3(x, y, z),
+                                new Vector3(x, y + 1, z)
                         );
 
                         offset += 4;
@@ -90,10 +90,10 @@ public class Chunk {
                     if (shouldRenderFace(blockId, new Vector3(x, y, z), Direction.SOUTH)) {
 
                         addFace(
-                                new Vector3(x + 1, y + 1, z + 1),
-                                new Vector3(x + 1, y, z + 1),
+                                new Vector3(x, y + 1, z + 1),
                                 new Vector3(x, y, z + 1),
-                                new Vector3(x, y + 1, z + 1)
+                                new Vector3(x + 1, y, z + 1),
+                                new Vector3(x + 1, y + 1, z + 1)
                         );
 
                         offset += 4;
@@ -102,10 +102,10 @@ public class Chunk {
                     if (shouldRenderFace(blockId, new Vector3(x, y, z), Direction.EAST)) {
 
                         addFace(
-                                new Vector3(x + 1, y + 1, z),
-                                new Vector3(x + 1, y, z),
+                                new Vector3(x + 1, y + 1, z + 1),
                                 new Vector3(x + 1, y, z + 1),
-                                new Vector3(x + 1, y + 1, z + 1)
+                                new Vector3(x + 1, y, z),
+                                new Vector3(x + 1, y + 1, z)
                         );
 
                         offset += 4;
@@ -114,10 +114,10 @@ public class Chunk {
                     if (shouldRenderFace(blockId, new Vector3(x, y, z), Direction.WEST)) {
 
                         addFace(
-                                new Vector3(x, y + 1, z + 1),
-                                new Vector3(x, y, z + 1),
+                                new Vector3(x, y + 1, z),
                                 new Vector3(x, y, z),
-                                new Vector3(x, y + 1, z)
+                                new Vector3(x, y, z + 1),
+                                new Vector3(x, y + 1, z + 1)
                         );
 
                         offset += 4;
