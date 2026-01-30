@@ -2,18 +2,22 @@ package main.java.net.kallen.kosmos.world;
 
 public class Block {
 
-    private boolean dirty;
+    private BlockProperties properties;
 
     public Block(BlockProperties properties) {
-        dirty = false;
+        this.properties = properties;
     }
 
-    public boolean isDirty() {
-        return dirty;
+    public boolean isSolid() {
+        return properties.isSolid();
     }
 
-    public void setDirty(boolean dirty) {
-        this.dirty = dirty;
+    public boolean isOpaque() {
+        return properties.isOpaque();
+    }
+
+    public boolean isTransparent() {
+        return properties.isTransparent();
     }
 
 }

@@ -26,4 +26,16 @@ public class BlockRegistry {
         return id;
     }
 
+    public static Block getBlockFromId(byte id) {
+        return ID_TO_TYPE.get(id);
+    }
+
+    public static Block getBlockFromName(String name) {
+        return ID_TO_TYPE.get(NAME_TO_ID.get(name));
+    }
+
+    public static byte getIdFromName(String name) {
+        return NAME_TO_ID.get(name);
+    }
+
 }

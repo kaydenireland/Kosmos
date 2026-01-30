@@ -15,7 +15,7 @@ public class GameObject {
     }
 
     public void update() {
-        position.setZ(position.getZ() - 0.05f);
+
     }
 
     public Vector3 getPosition() {

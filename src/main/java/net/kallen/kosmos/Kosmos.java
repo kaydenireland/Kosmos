@@ -7,6 +7,7 @@ import main.java.net.kallen.engine.math.Vector2;
 import main.java.net.kallen.engine.math.Vector3;
 import main.java.net.kallen.engine.objects.Camera;
 import main.java.net.kallen.engine.objects.GameObject;
+import main.java.net.kallen.kosmos.world.Chunk;
 import org.lwjgl.glfw.GLFW;
 
 public class Kosmos implements Runnable {
@@ -18,10 +19,7 @@ public class Kosmos implements Runnable {
     public final int WIDTH = 1280, HEIGHT = 780;
     private boolean thirdPerson = false;
 
-    public Mesh mesh = MeshBuilder.buildCube(new Material("/main/resources/textures/cat.png"));
-
-    public GameObject[][][] objects = new GameObject[16][16][16];
-
+    public Chunk chunk;
 
     public Camera camera = new Camera(new Vector3(0f, 0f, 1f), new Vector3(0f, 0f,0f));
 
@@ -39,21 +37,10 @@ public class Kosmos implements Runnable {
         // window.setFullscreen(true);
         window.create();
         window.mouseState(true);
-        mesh.create();
         shader.create();
 
-        for (int x = 0; x < 16; x++) {
-            for (int y = 0; y < 16; y++) {
-                for (int z = 0; z < 16; z++) {
-                    objects[x][y][z] = new GameObject(
-                            new Vector3(x, y, z),
-                            new Vector3(0f, 0f, 0f),
-                            new Vector3(1f, 1f, 1f),
-                            mesh
-                    );
-                }
-            }
-        }
+        chunk = new Chunk();
+        chunk.generateMesh();
 
     }
 
@@ -75,23 +62,18 @@ public class Kosmos implements Runnable {
     private void update() {
         window.update();
         camera.update();
+        chunk.update();
     }
 
     private void render() {
-        for (int x = 0; x < 16; x++) {
-            for (int y = 0; y < 16; y++) {
-                for (int z = 0; z < 16; z++) {
-                    renderer.renderObject(objects[x][y][z]);
-                }
-            }
-        }
+        chunk.render(renderer);
         window.swapBuffers();
     }
 
     private void close() {
         window.destroy();
-        mesh.destroy();
         shader.destroy();
+        chunk.mesh.destroy();
     }
 
     public static void main(String[] args) {
