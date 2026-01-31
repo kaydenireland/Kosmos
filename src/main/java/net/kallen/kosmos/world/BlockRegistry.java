@@ -17,10 +17,26 @@ public class BlockRegistry {
             BlockProperties.create().transparent().solid(false)));
     public static final byte DIRT = register("dirt", new Block(
             BlockProperties.create()));
+    public static final byte GRASS = register("grass", new Block(
+            BlockProperties.create()));
+    public static final byte MUD = register("mud", new Block(
+            BlockProperties.create()));
     public static final byte STONE = register("stone", new Block(
+            BlockProperties.create()));
+    public static final byte COBBLESTONE = register("cobblestone", new Block(
+            BlockProperties.create()));
+    public static final byte OBSIDIAN = register("obsidian", new Block(
+            BlockProperties.create()));
+    public static final byte BEDROCK = register("bedrock", new Block(
+            BlockProperties.create()));
+    public static final byte OAK_PLANKS = register("oak_planks", new Block(
             BlockProperties.create()));
     public static final byte GLASS = register("glass", new Block(
             BlockProperties.create().transparent()));
+    public static final byte TINTED_GLASS = register("tinted_glass", new Block(
+            BlockProperties.create().transparent()));
+    public static final byte WHITE_WOOl = register("white_wool", new Block(
+            BlockProperties.create()));
 
 
     private static byte register(String name, Block block) {

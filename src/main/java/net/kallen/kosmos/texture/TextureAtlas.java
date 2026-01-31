@@ -110,7 +110,7 @@ public class TextureAtlas {
         float u1 = (pos.getX() + 1) * pixelSize;
         float v1 = (pos.getY() + 1) * pixelSize;
 
-        float padding = 0.5f / atlasPixels;
+        float padding = 0.0f / atlasPixels;
         u0 += padding;
         v0 += padding;
         u1 -= padding;
