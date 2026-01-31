@@ -6,6 +6,8 @@ import main.java.net.kallen.engine.math.Vector2;
 import main.java.net.kallen.engine.math.Vector3;
 import org.lwjgl.glfw.GLFW;
 
+import static java.lang.Math.clamp;
+
 public class Camera {
     private Vector3 position, rotation;
     private float moveSpeed = 0.05f;
@@ -13,6 +15,10 @@ public class Camera {
     private float distance = 2.0f, horizontalAngle = 0, verticalAngle = 0;
     private Vector2 oldMousePos = new Vector2(0f, 0f);
     private Vector2 newMousePos = new Vector2(0f, 0f);
+
+    private boolean limitPitch = true;
+    private float maxPitch = 90f;
+    private float minPitch = -90f;
 
     public Camera(Vector3 position, Vector3 rotation) {
         this.position = position;
@@ -36,7 +42,12 @@ public class Camera {
         float dx = newMousePos.getX() - oldMousePos.getX();
         float dy = newMousePos.getY() - oldMousePos.getY();
 
-        rotation = Vector3.add(rotation, new Vector3(-dy * mouseSensitivity, -dx * mouseSensitivity, 0));
+        float newPitch = rotation.getX() - dy * mouseSensitivity;
+        float newYaw = rotation.getY() - dx * mouseSensitivity;
+
+        if (limitPitch) newPitch = clamp(newPitch, minPitch, maxPitch);
+
+        rotation = new Vector3(newPitch, newYaw, 0);
 
         oldMousePos.set(newMousePos.getX(), newMousePos.getY());
     }
@@ -60,9 +71,6 @@ public class Camera {
             }
         }
 
-
-
-
         float horizontalDistance = (float) (distance * Math.cos(Math.toRadians(verticalAngle)));
         float verticalDistance = (float) (distance * Math.sin(Math.toRadians(verticalAngle)));
 
@@ -83,4 +91,23 @@ public class Camera {
     public Vector3 getRotation() {
         return rotation;
     }
+
+    public void limitPitch(boolean limitPitch) {
+        this.limitPitch = limitPitch;
+    }
+
+    public boolean currentlyLimitingPitch() {
+        return limitPitch;
+    }
+
+    public void changePitchLimits(float limit) {
+        maxPitch = limit;
+        minPitch = -limit;
+    }
+
+    public void changePitchLimits(float max, float min) {
+        maxPitch = max;
+        minPitch = min;
+    }
+
 }
