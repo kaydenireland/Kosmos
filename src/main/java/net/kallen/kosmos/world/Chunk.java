@@ -2,21 +2,24 @@ package main.java.net.kallen.kosmos.world;
 
 import main.java.net.kallen.engine.graphics.Renderer;
 import main.java.net.kallen.engine.math.ByteArray3D;
+import main.java.net.kallen.engine.math.Vector3;
 import main.java.net.kallen.kosmos.render.ChunkMesh;
 import main.java.net.kallen.kosmos.texture.TextureAtlas;
 
 public class Chunk {
 
     public final int SIZE = 16;
-    private ByteArray3D blocks;
+    private ByteArray3D blocks = new ByteArray3D(SIZE);
     public ChunkMesh chunkMesh;
     private boolean dirty;
 
-    public Chunk(TextureAtlas atlas) {
-        chunkMesh = new ChunkMesh(this, atlas);
+    public Chunk(TextureAtlas atlas, Vector3 chunkPosition) {
+        chunkMesh = new ChunkMesh(this, chunkPosition, atlas);
+        generateTerrain();
         dirty = true;
+    }
 
-        blocks = new ByteArray3D(SIZE);
+    public void generateTerrain() {
         for (int x = 0; x < SIZE; x++) {
             for (int y = 0; y < SIZE; y++) {
                 for (int z = 0; z < SIZE; z++) {

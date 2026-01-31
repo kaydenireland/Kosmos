@@ -20,6 +20,7 @@ public class ChunkMesh {
     private Mesh transparentMesh;
 
     private final Chunk chunk;
+    private final Vector3 position;
     private final TextureAtlas atlas;
 
     private final ArrayList<Vertex> opaqueVertices = new ArrayList<>();
@@ -32,20 +33,21 @@ public class ChunkMesh {
 
     private float[] uvs;
 
-    public ChunkMesh(Chunk chunk, TextureAtlas atlas) {
+    public ChunkMesh(Chunk chunk, Vector3 position, TextureAtlas atlas) {
         this.chunk = chunk;
+        this.position = position;
         this.atlas = atlas;
     }
 
     public void renderOpaque(Renderer renderer) {
         if (opaqueMesh != null) {
-            renderer.renderMesh(opaqueMesh);
+            renderer.renderMesh(opaqueMesh, position);
         }
     }
 
     public void renderTransparent(Renderer renderer) {
         if (transparentMesh != null) {
-            renderer.renderMesh(transparentMesh);
+            renderer.renderMesh(transparentMesh, position);
         }
     }
 
