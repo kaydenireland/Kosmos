@@ -6,10 +6,11 @@ import main.java.net.kallen.engine.io.Window;
 import main.java.net.kallen.engine.math.Vector3;
 import main.java.net.kallen.engine.objects.Camera;
 import main.java.net.kallen.kosmos.util.ResourceLocation;
-import main.java.net.kallen.kosmos.util.TextureAtlas;
+import main.java.net.kallen.kosmos.texture.TextureAtlas;
 import main.java.net.kallen.kosmos.world.BlockRegistry;
 import main.java.net.kallen.kosmos.world.Chunk;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL11;
 
 public class Kosmos implements Runnable {
 
@@ -48,7 +49,7 @@ public class Kosmos implements Runnable {
 
         blockAtlas = new TextureAtlas(16, BlockRegistry.getAllTextures());
         chunk = new Chunk(blockAtlas);
-        chunk.generateMesh();
+        chunk.update();
 
     }
 
@@ -74,14 +75,21 @@ public class Kosmos implements Runnable {
     }
 
     private void render() {
-        chunk.render(renderer);
+        // First pass: Render all opaque geometry
+        GL11.glDepthMask(true);
+        chunk.renderOpaque(renderer);
+
+        // Second pass: Render all transparent geometry
+        GL11.glDepthMask(false); // Don't write depth, but still test
+        chunk.renderTransparent(renderer);
+        GL11.glDepthMask(true); // Re-enable depth writing
         window.swapBuffers();
     }
 
     private void close() {
         window.destroy();
         shader.destroy();
-        chunk.mesh.destroy();
+        chunk.destroy();
         blockAtlas.destroy();
     }
 

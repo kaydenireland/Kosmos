@@ -1,4 +1,4 @@
-package main.java.net.kallen.kosmos.util;
+package main.java.net.kallen.kosmos.texture;
 
 import main.java.net.kallen.engine.math.Vector2;
 import main.java.net.kallen.engine.util.TextureLoader;
