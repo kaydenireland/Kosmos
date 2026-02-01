@@ -25,6 +25,8 @@ public class BlockRegistry {
             BlockProperties.create()));
     public static final byte COBBLESTONE = register("cobblestone", new Block(
             BlockProperties.create()));
+    public static final byte DEEPSLATE = register("deepslate", new Block(
+            BlockProperties.create()));
     public static final byte OBSIDIAN = register("obsidian", new Block(
             BlockProperties.create()));
     public static final byte BEDROCK = register("bedrock", new Block(

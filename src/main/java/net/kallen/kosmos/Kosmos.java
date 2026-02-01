@@ -3,15 +3,15 @@ package main.java.net.kallen.kosmos;
 import main.java.net.kallen.engine.graphics.*;
 import main.java.net.kallen.engine.io.Input;
 import main.java.net.kallen.engine.io.Window;
+import main.java.net.kallen.engine.math.Vector2;
 import main.java.net.kallen.engine.math.Vector3;
-import main.java.net.kallen.engine.objects.Camera;
+import main.java.net.kallen.engine.objects.FirstPersonCamera;
+import main.java.net.kallen.kosmos.entity.Player;
 import main.java.net.kallen.kosmos.util.ResourceLocation;
 import main.java.net.kallen.kosmos.texture.TextureAtlas;
 import main.java.net.kallen.kosmos.world.BlockRegistry;
-import main.java.net.kallen.kosmos.world.Chunk;
 import main.java.net.kallen.kosmos.world.World;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 
 public class Kosmos implements Runnable {
 
@@ -26,7 +26,10 @@ public class Kosmos implements Runnable {
     public World world;
     public static TextureAtlas blockAtlas;
 
-    public Camera camera = new Camera(new Vector3(0f, 0f, 1f), new Vector3(0f, 0f,0f));
+    public Player player;
+    public FirstPersonCamera camera;
+
+    private Vector2 lastMousePos = new Vector2(0f, 0f);
 
     public void start() {
         gameThread = new Thread(this,"game");
@@ -41,21 +44,29 @@ public class Kosmos implements Runnable {
                 ResourceLocation.fromNamespaceAndDirectory(Kosmos.ID, ResourceLocation.SHADERS, "mainVertex").toFilePath(".txt"),
                 ResourceLocation.fromNamespaceAndDirectory(Kosmos.ID, ResourceLocation.SHADERS, "mainFragment").toFilePath(".txt")
         );
-        renderer = new Renderer(window, shader, camera);
-        window.setBackgroundColor(0f, .1f, .1f);
+
+        window.setBackgroundColor(.5f, .7f, 1f);
         // window.setFullscreen(true);
         window.create();
         window.mouseState(true);
         shader.create();
 
         blockAtlas = new TextureAtlas(16, BlockRegistry.getAllTextures());
-        world = new World(blockAtlas);
+        world = new World(blockAtlas, 999);
+        player = new Player(new Vector3(0, 80, 0));
+        camera = new FirstPersonCamera(player.getPosition(), new Vector3(0f, 0f,0f));
+
+        renderer = new Renderer(window, shader, camera);
 
         world.loadChunk(new Vector3(0, 0, 0));
         world.loadChunk(new Vector3(1, 0, 0));
         world.loadChunk(new Vector3(0, 1, 0));
         world.loadChunk(new Vector3(-1, -1, -1));
+        world.loadChunk(new Vector3(0, 2, 0));
+        world.loadChunk(new Vector3(0, 3, 0));
+        world.loadChunk(new Vector3(0, 4, 0));
 
+        lastMousePos.set((float) Input.getMouseX(), (float) Input.getMouseY());
     }
 
 
@@ -66,7 +77,12 @@ public class Kosmos implements Runnable {
             update();
             render();
 
-            if (Input.isKeyDown(GLFW.GLFW_KEY_F)) thirdPerson = !thirdPerson;
+            if (Input.isKeyDown(GLFW.GLFW_KEY_F3)) {
+                System.out.println("Player pos: " + player.getPosition().toString());
+                System.out.println("Player rot: " + player.getRotation().toString());
+                System.out.println("Player chunk: " + player.getChunkPosition().toString());
+            }
+            if (Input.isKeyDown(GLFW.GLFW_KEY_F5)) thirdPerson = !thirdPerson;
             if (Input.isKeyDown(GLFW.GLFW_KEY_F11)) window.setFullscreen(!window.isFullscreen());
             if (Input.isKeyDown(GLFW.GLFW_KEY_L)) window.mouseState(!window.getMouseLock());
         }
@@ -75,8 +91,15 @@ public class Kosmos implements Runnable {
 
     private void update() {
         window.update();
-        camera.update();
+        Vector2 currentMousePos = new Vector2((float) Input.getMouseX(), (float) Input.getMouseY());
+
+        player.update(currentMousePos, lastMousePos);
+
+        camera.followTarget(player.getPosition(), player.getRotation());
+
         world.update();
+
+        lastMousePos.set(currentMousePos.getX(), currentMousePos.getY());
     }
 
     private void render() {

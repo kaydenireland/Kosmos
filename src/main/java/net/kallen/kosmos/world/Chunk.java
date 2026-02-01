@@ -15,10 +15,10 @@ public class Chunk {
 
     public Chunk(TextureAtlas atlas, Vector3 chunkPosition) {
         chunkMesh = new ChunkMesh(this, chunkPosition, atlas);
-        generateTerrain();
         dirty = true;
     }
 
+    @Deprecated
     public void generateTerrain() {
         for (int x = 0; x < SIZE; x++) {
             for (int y = 0; y < SIZE; y++) {

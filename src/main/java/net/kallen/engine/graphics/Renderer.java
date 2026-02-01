@@ -10,7 +10,6 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
 
-import static org.lwjgl.opengl.GL11.glBlendFunc;
 
 public class Renderer {
 

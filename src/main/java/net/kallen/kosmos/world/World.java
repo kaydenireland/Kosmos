@@ -10,16 +10,21 @@ import java.util.Map;
 
 public class World {
 
+    private double seed;
+    private TerrainGenerator terrainGenerator;
     private Map<Vector3, Chunk> chunks = new HashMap<>();
     private TextureAtlas atlas;
 
-    public World(TextureAtlas atlas) {
+    public World(TextureAtlas atlas, double seed) {
         this.atlas = atlas;
+        this.seed = seed;
+        this.terrainGenerator = new TerrainGenerator(seed);
     }
 
     public void loadChunk(Vector3 position) {
         if(!chunks.containsKey(position)) {
-            Chunk newChunk = new Chunk(atlas, chunkToWorldPos(position));
+            Chunk newChunk = new Chunk(atlas, Position.chunkToWorldPos(position));
+            terrainGenerator.generateChunk(newChunk, position);
             chunks.put(position, newChunk);
         }
     }
@@ -53,7 +58,7 @@ public class World {
     }
 
     public byte getBlock(Vector3 worldPos) {
-        Vector3 chunkPos = worldToChunkPos(worldPos);
+        Vector3 chunkPos = Position.worldToChunkPos(worldPos);
         Chunk chunk = chunks.get(chunkPos);
         if (chunk == null) return BlockRegistry.AIR;
 
@@ -65,7 +70,7 @@ public class World {
     }
 
     public void setBlock(Vector3 worldPos, byte blockId) {
-        Vector3 chunkPos = worldToChunkPos(worldPos);
+        Vector3 chunkPos = Position.worldToChunkPos(worldPos);
         Chunk chunk = chunks.get(chunkPos);
 
         if (chunk != null) {
@@ -75,22 +80,6 @@ public class World {
 
             chunk.setBlock(localX, localY, localZ, blockId);
         }
-    }
-
-    private Vector3 worldToChunkPos(Vector3 worldPos) {
-        float nx = worldPos.getX() / 15;
-        float ny = worldPos.getY() / 15;
-        float nz = worldPos.getZ() / 15;
-
-        return new Vector3(nx, ny, nz);
-    }
-
-    private Vector3 chunkToWorldPos(Vector3 chunkPos) {
-        float nx = chunkPos.getX() * 16;
-        float ny = chunkPos.getY() * 16;
-        float nz = chunkPos.getZ() * 16;
-
-        return new Vector3(nx, ny, nz);
     }
 
 }
