@@ -2,23 +2,28 @@ package main.java.net.kallen.kosmos.world;
 
 import main.java.net.kallen.engine.graphics.Renderer;
 import main.java.net.kallen.engine.math.Vector3;
+import main.java.net.kallen.kosmos.entity.Player;
 import main.java.net.kallen.kosmos.texture.TextureAtlas;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class World {
 
-    private double seed;
+    private final double seed;
     private TerrainGenerator terrainGenerator;
     private Map<Vector3, Chunk> chunks = new HashMap<>();
     private TextureAtlas atlas;
 
+    private int loadDistance = 8;
+
     public World(TextureAtlas atlas, double seed) {
         this.atlas = atlas;
         this.seed = seed;
-        this.terrainGenerator = new TerrainGenerator(seed);
+        this.terrainGenerator = new TerrainGenerator(this.seed);
     }
 
     public void loadChunk(Vector3 position) {
@@ -26,12 +31,68 @@ public class World {
             Chunk newChunk = new Chunk(atlas, Position.chunkToWorldPos(position));
             terrainGenerator.generateChunk(newChunk, position);
             chunks.put(position, newChunk);
+            System.out.println("Loaded chunk at " + position + " (Total: " + chunks.size() + ")");
         }
     }
 
     public void update() {
         for (Chunk chunk : chunks.values()) {
             chunk.update();
+        }
+    }
+
+    public void updateChunks(Player player) {
+        Vector3 lastPosition = player.getLastChunkPosition();
+        Vector3 currentPosition = player.getChunkPosition();
+
+        if (!currentPosition.equals(lastPosition)) {
+            loadChunksAroundPlayer(currentPosition);
+            unloadDistantChunks(currentPosition);
+        }
+
+    }
+
+    private void loadChunksAroundPlayer(Vector3 playerChunkPos) {
+        int px = (int) playerChunkPos.getX();
+        int py = (int) playerChunkPos.getY();
+        int pz = (int) playerChunkPos.getZ();
+
+        for (int x = px - loadDistance; x <= px + loadDistance; x++) {
+            for (int z = pz - loadDistance; z <= pz + loadDistance; z++) {
+                for (int y = py - 1; y <= py + 1; y++) {
+                    Vector3 chunkPos = new Vector3(x, y, z);
+
+                    int dx = x - px;
+                    int dz = z - pz;
+                    if (dx * dx + dz * dz <= loadDistance * loadDistance) {
+                        loadChunk(chunkPos);
+                    }
+                }
+            }
+        }
+    }
+
+    private void unloadDistantChunks(Vector3 playerChunkPos) {
+        int px = (int) playerChunkPos.getX();
+        int pz = (int) playerChunkPos.getZ();
+
+        List<Vector3> chunksToUnload = new ArrayList<>();
+
+        for (Vector3 chunkPos : chunks.keySet()) {
+            int dx = (int) chunkPos.getX() - px;
+            int dz = (int) chunkPos.getZ() - pz;
+
+            if (dx * dx + dz * dz > (loadDistance + 2) * (loadDistance + 2)) {
+                chunksToUnload.add(chunkPos);
+            }
+        }
+
+        for (Vector3 chunkPos : chunksToUnload) {
+            Chunk chunk = chunks.remove(chunkPos);
+            if (chunk != null) {
+                chunk.destroy();
+                System.out.println("Unloaded chunk at " + chunkPos);
+            }
         }
     }
 
@@ -80,6 +141,14 @@ public class World {
 
             chunk.setBlock(localX, localY, localZ, blockId);
         }
+    }
+
+    public void setLoadDistance(int loadDistance) {
+        this.loadDistance = loadDistance;
+    }
+
+    public int getLoadedChunkCount() {
+        return chunks.size();
     }
 
 }

@@ -52,19 +52,11 @@ public class Kosmos implements Runnable {
         shader.create();
 
         blockAtlas = new TextureAtlas(16, BlockRegistry.getAllTextures());
-        world = new World(blockAtlas, 999);
         player = new Player(new Vector3(0, 80, 0));
         camera = new FirstPersonCamera(player.getPosition(), new Vector3(0f, 0f,0f));
+        world = new World(blockAtlas, 999);
 
         renderer = new Renderer(window, shader, camera);
-
-        world.loadChunk(new Vector3(0, 0, 0));
-        world.loadChunk(new Vector3(1, 0, 0));
-        world.loadChunk(new Vector3(0, 1, 0));
-        world.loadChunk(new Vector3(-1, -1, -1));
-        world.loadChunk(new Vector3(0, 2, 0));
-        world.loadChunk(new Vector3(0, 3, 0));
-        world.loadChunk(new Vector3(0, 4, 0));
 
         lastMousePos.set((float) Input.getMouseX(), (float) Input.getMouseY());
     }
@@ -97,6 +89,7 @@ public class Kosmos implements Runnable {
 
         camera.followTarget(player.getPosition(), player.getRotation());
 
+        world.updateChunks(player);
         world.update();
 
         lastMousePos.set(currentMousePos.getX(), currentMousePos.getY());

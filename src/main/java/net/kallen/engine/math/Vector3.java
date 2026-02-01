@@ -72,6 +72,11 @@ public class Vector3 {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "(x: " + x + ", y: " + y + ", z: " + z;
+    }
+
     public float getX() {
         return x;
     }
