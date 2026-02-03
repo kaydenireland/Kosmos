@@ -29,6 +29,9 @@ public class Kosmos implements Runnable {
     public final int WIDTH = 1280, HEIGHT = 780;
     private boolean thirdPerson = false;
 
+    private static final int TICKS_PER_SECOND = 20;
+    private static final double TICK_INTERVAL = 1.0 / TICKS_PER_SECOND;
+
     public World world;
     public static TextureAtlas blockAtlas;
 
@@ -76,9 +79,23 @@ public class Kosmos implements Runnable {
             JOptionPane.showMessageDialog(null, e.toString(), "Failed to Start Kosmos", 0);
         }
 
+        double previousTime = System.nanoTime() / 1_000_000_000.0;
+        double accumulator = 0.0;
+
         while (!window.shouldClose() && !Input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
+
+            double currentTime = System.nanoTime() / 1_000_000_000.0;
+            double dt = currentTime - previousTime;
+            previousTime = currentTime;
+            accumulator += dt;
+
             update();
             render();
+
+            while (accumulator >= TICK_INTERVAL) {
+                tick();
+                accumulator -= TICK_INTERVAL;
+            }
 
             if (Input.isKeyDown(GLFW.GLFW_KEY_F3)) {
                 System.out.println("Player pos: " + player.getPosition().toString());
@@ -102,18 +119,23 @@ public class Kosmos implements Runnable {
         close();
     }
 
+    // Constant Updating
     private void update() {
         window.update();
         Vector2 currentMousePos = new Vector2((float) Input.getMouseX(), (float) Input.getMouseY());
 
-        player.update(currentMousePos, lastMousePos, world);
+        player.updateView(currentMousePos, lastMousePos);
 
         camera.followTarget(Vector3.add(player.getPosition(), new Vector3(0f, player.getEyeLevel(), 0)), player.getRotation());
 
+        lastMousePos.set(currentMousePos.getX(), currentMousePos.getY());
+    }
+
+    // Update Every Tick
+    private void tick() {
+        player.tick(world);
         world.updateChunks(player);
         world.update();
-
-        lastMousePos.set(currentMousePos.getX(), currentMousePos.getY());
     }
 
     private void render() {

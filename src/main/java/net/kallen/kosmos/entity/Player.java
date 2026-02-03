@@ -9,15 +9,15 @@ import org.lwjgl.glfw.GLFW;
 
 public class Player extends Entity {
 
-    private float walkSpeed = 0.04f;
-    private float sprintMultiplier = 1.3f;
+    private float walkSpeed = 0.05f;
+    private float sprintMultiplier = 1.5f;
     private float jumpStrength = 0.42f;
     private float mouseSensitivity = 0.15f;
     private float eyeLevel = 1.6f;
 
     private Gamemode gamemode;
 
-    private float flySpeed = 0.05f;
+    private float flySpeed = 0.15f;
 
     private float reach = 5.0f;
 
@@ -26,8 +26,11 @@ public class Player extends Entity {
         this.gamemode = Gamemode.SURVIVAL;
     }
 
-    public void update(Vector2 mousePos, Vector2 lastMousePos, World world) {
+    public void updateView(Vector2 mousePos, Vector2 lastMousePos) {
         handleView(mousePos, lastMousePos);
+    }
+
+    public void tick(World world) {
         getMovementData();
         Physics.applyPhysics(this, world);
     }
