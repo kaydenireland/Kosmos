@@ -9,6 +9,12 @@ public class Vector3 {
         this.z = z;
     }
 
+    public Vector3(Vector3 other) {
+        this.x = other.getX();
+        this.y = other.getY();
+        this.z = other.getZ();
+    }
+
     public void set(float x, float y, float z) {
         this.x = x;
         this.y = y;
@@ -74,7 +80,7 @@ public class Vector3 {
 
     @Override
     public String toString() {
-        return "(x: " + x + ", y: " + y + ", z: " + z;
+        return "(x: " + x + ", y: " + y + ", z: " + z + ")";
     }
 
     public float getX() {

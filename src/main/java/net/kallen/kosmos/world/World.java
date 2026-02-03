@@ -27,11 +27,11 @@ public class World {
     }
 
     public void loadChunk(Vector3 position) {
-        if(!chunks.containsKey(position)) {
+        if(!chunks.containsKey(position) && position.getY() >= -4) {
             Chunk newChunk = new Chunk(atlas, Position.chunkToWorldPos(position));
             terrainGenerator.generateChunk(newChunk, position);
             chunks.put(position, newChunk);
-            System.out.println("Loaded chunk at " + position + " (Total: " + chunks.size() + ")");
+            // System.out.println("Loaded chunk at " + position + " (Total: " + chunks.size() + ")");
         }
     }
 
@@ -91,7 +91,7 @@ public class World {
             Chunk chunk = chunks.remove(chunkPos);
             if (chunk != null) {
                 chunk.destroy();
-                System.out.println("Unloaded chunk at " + chunkPos);
+                // System.out.println("Unloaded chunk at " + chunkPos);
             }
         }
     }
@@ -123,9 +123,9 @@ public class World {
         Chunk chunk = chunks.get(chunkPos);
         if (chunk == null) return BlockRegistry.AIR;
 
-        int localX = (int) worldPos.getX() % 16;
-        int localY = (int) worldPos.getY() % 16;
-        int localZ = (int) worldPos.getZ() % 16;
+        int localX = Math.floorMod((int) worldPos.getX(), 16);
+        int localY = Math.floorMod((int) worldPos.getY(), 16);
+        int localZ = Math.floorMod((int) worldPos.getZ(), 16);
 
         return chunk.getBlock(localX, localY, localZ);
     }
@@ -135,9 +135,9 @@ public class World {
         Chunk chunk = chunks.get(chunkPos);
 
         if (chunk != null) {
-            int localX = (int) worldPos.getX() & 15;
-            int localY = (int) worldPos.getY() & 15;
-            int localZ = (int) worldPos.getZ() & 15;
+            int localX = Math.floorMod((int) worldPos.getX(), 16);
+            int localY = Math.floorMod((int) worldPos.getY(), 16);
+            int localZ = Math.floorMod((int) worldPos.getZ(), 16);
 
             chunk.setBlock(localX, localY, localZ, blockId);
         }
@@ -150,5 +150,6 @@ public class World {
     public int getLoadedChunkCount() {
         return chunks.size();
     }
+
 
 }

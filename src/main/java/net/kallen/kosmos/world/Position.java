@@ -5,9 +5,9 @@ import main.java.net.kallen.engine.math.Vector3;
 public class Position {
 
     public static Vector3 worldToChunkPos(Vector3 worldPos) {
-        float nx = worldPos.getX() / 15;
-        float ny = worldPos.getY() / 15;
-        float nz = worldPos.getZ() / 15;
+        float nx = Math.floorDiv((int) worldPos.getX(), 16);
+        float ny = Math.floorDiv((int) worldPos.getY(), 16);
+        float nz = Math.floorDiv((int) worldPos.getZ(), 16);
 
         return new Vector3(nx, ny, nz);
     }

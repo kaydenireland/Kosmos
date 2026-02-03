@@ -1,17 +1,23 @@
 package main.java.net.kallen.kosmos;
 
 import main.java.net.kallen.engine.graphics.*;
+import main.java.net.kallen.engine.graphics.Renderer;
 import main.java.net.kallen.engine.io.Input;
 import main.java.net.kallen.engine.io.Window;
 import main.java.net.kallen.engine.math.Vector2;
 import main.java.net.kallen.engine.math.Vector3;
 import main.java.net.kallen.engine.objects.FirstPersonCamera;
+import main.java.net.kallen.kosmos.entity.Gamemode;
 import main.java.net.kallen.kosmos.entity.Player;
 import main.java.net.kallen.kosmos.util.ResourceLocation;
 import main.java.net.kallen.kosmos.texture.TextureAtlas;
 import main.java.net.kallen.kosmos.world.BlockRegistry;
 import main.java.net.kallen.kosmos.world.World;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLUtil;
+
+import javax.swing.*;
 
 public class Kosmos implements Runnable {
 
@@ -39,7 +45,7 @@ public class Kosmos implements Runnable {
     public void init() {
 
         System.out.println("Initializing Game");
-        window = new Window(WIDTH, HEIGHT, "Window");
+        window = new Window(WIDTH, HEIGHT, "Kosmos");
         shader = new Shader(
                 ResourceLocation.fromNamespaceAndDirectory(Kosmos.ID, ResourceLocation.SHADERS, "mainVertex").toFilePath(".txt"),
                 ResourceLocation.fromNamespaceAndDirectory(Kosmos.ID, ResourceLocation.SHADERS, "mainFragment").toFilePath(".txt")
@@ -53,8 +59,9 @@ public class Kosmos implements Runnable {
 
         blockAtlas = new TextureAtlas(16, BlockRegistry.getAllTextures());
         player = new Player(new Vector3(0, 80, 0));
-        camera = new FirstPersonCamera(player.getPosition(), new Vector3(0f, 0f,0f));
+        camera = new FirstPersonCamera(new Vector3(player.getPosition()), new Vector3(0f, 0f,0f));
         world = new World(blockAtlas, 999);
+        world.updateChunks(player);
 
         renderer = new Renderer(window, shader, camera);
 
@@ -63,7 +70,11 @@ public class Kosmos implements Runnable {
 
 
     public void run() {
-        init();
+        try{
+            this.init();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "Failed to Start Kosmos", 0);
+        }
 
         while (!window.shouldClose() && !Input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
             update();
@@ -73,10 +84,20 @@ public class Kosmos implements Runnable {
                 System.out.println("Player pos: " + player.getPosition().toString());
                 System.out.println("Player rot: " + player.getRotation().toString());
                 System.out.println("Player chunk: " + player.getChunkPosition().toString());
+                System.out.println("Loaded Chunks: " + world.getLoadedChunkCount());
             }
             if (Input.isKeyDown(GLFW.GLFW_KEY_F5)) thirdPerson = !thirdPerson;
             if (Input.isKeyDown(GLFW.GLFW_KEY_F11)) window.setFullscreen(!window.isFullscreen());
             if (Input.isKeyDown(GLFW.GLFW_KEY_L)) window.mouseState(!window.getMouseLock());
+            if (Input.isKeyDown(GLFW.GLFW_KEY_EQUAL)) checkGlError();
+
+            if (Input.isKeyDown(GLFW.GLFW_KEY_F)) player.setFlying(!player.isFlying());
+
+            // Game Mode Toggles
+            if (Input.isKeyDown(GLFW.GLFW_KEY_KP_0)) player.setGamemode(Gamemode.SURVIVAL);
+            if (Input.isKeyDown(GLFW.GLFW_KEY_KP_1)) player.setGamemode(Gamemode.CREATIVE);
+            if (Input.isKeyDown(GLFW.GLFW_KEY_KP_2)) player.setGamemode(Gamemode.SPECTATOR);
+
         }
         close();
     }
@@ -85,9 +106,9 @@ public class Kosmos implements Runnable {
         window.update();
         Vector2 currentMousePos = new Vector2((float) Input.getMouseX(), (float) Input.getMouseY());
 
-        player.update(currentMousePos, lastMousePos);
+        player.update(currentMousePos, lastMousePos, world);
 
-        camera.followTarget(player.getPosition(), player.getRotation());
+        camera.followTarget(Vector3.add(player.getPosition(), new Vector3(0f, player.getEyeLevel(), 0)), player.getRotation());
 
         world.updateChunks(player);
         world.update();
@@ -106,6 +127,11 @@ public class Kosmos implements Runnable {
         shader.destroy();
         world.destroy();
         blockAtlas.destroy();
+    }
+
+    private void checkGlError() {
+        int e = GL11.glGetError();
+        if (e != 0) throw new IllegalStateException();
     }
 
     public static void main(String[] args) {

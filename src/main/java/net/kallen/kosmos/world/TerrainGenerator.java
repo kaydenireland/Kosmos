@@ -23,7 +23,8 @@ public class TerrainGenerator {
                 for (int y = 0; y < chunk.SIZE; y++) {
                     int worldY = (int) chunkPos.getY() * chunk.SIZE + y;
 
-                    if (worldY < height - 64) {
+                    if (worldY == -64) chunk.setBlock(x, y, z, BlockRegistry.BEDROCK);
+                    else if (worldY < height - 64) {
                         chunk.setBlock(x, y, z, BlockRegistry.DEEPSLATE);
                     } else if (worldY < height - 4) {
                         chunk.setBlock(x, y, z, BlockRegistry.STONE);
