@@ -65,6 +65,7 @@ public class Kosmos implements Runnable {
         camera = new FirstPersonCamera(new Vector3(player.getPosition()), new Vector3(0f, 0f,0f));
         world = new World(blockAtlas, 999);
         world.updateChunks(player);
+        world.update();
 
         renderer = new Renderer(window, shader, camera);
 

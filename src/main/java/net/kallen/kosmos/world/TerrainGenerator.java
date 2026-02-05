@@ -18,26 +18,30 @@ public class TerrainGenerator {
                 int worldZ = (int) chunkPos.getZ() * chunk.SIZE + z;
 
                 double noiseValue = noise.noise(worldX * 0.01, worldZ * 0.01);
-                int height = (int) (noiseValue + 64); // Range: 0 - 64
+                int surfaceHeight = (int) ((noiseValue * 0.5 + 0.5) * 16 - 8); // Range: -8 to 8 (centered at 0)
 
                 for (int y = 0; y < chunk.SIZE; y++) {
                     int worldY = (int) chunkPos.getY() * chunk.SIZE + y;
 
-                    if (worldY == -64) chunk.setBlock(x, y, z, BlockRegistry.BEDROCK);
-                    else if (worldY < height - 64) {
-                        chunk.setBlock(x, y, z, BlockRegistry.DEEPSLATE);
-                    } else if (worldY < height - 4) {
-                        chunk.setBlock(x, y, z, BlockRegistry.STONE);
-                    } else if (worldY <= height - 1) {
-                        chunk.setBlock(x, y, z, BlockRegistry.DIRT);
-                    } else if (worldY == height) {
-                        chunk.setBlock(x, y, z, BlockRegistry.GRASS);
+                    byte blockType;
+
+                    if (worldY == -128) {
+                        blockType = BlockRegistry.BEDROCK;
+                    } else if (worldY >= -127 && worldY < -64) {
+                        blockType = BlockRegistry.DEEPSLATE;
+                    } else if (worldY >= -64 && worldY <= surfaceHeight - 3) {
+                        blockType = BlockRegistry.STONE;
+                    } else if (worldY == surfaceHeight - 2 || worldY == surfaceHeight - 1) {
+                        blockType = BlockRegistry.DIRT;
+                    } else if (worldY == surfaceHeight) {
+                        blockType = BlockRegistry.GRASS;
                     } else {
-                        chunk.setBlock(x, y, z, BlockRegistry.AIR);
+                        blockType = BlockRegistry.AIR;
                     }
+
+                    chunk.setBlock(x, y, z, blockType);
                 }
             }
         }
     }
-
 }

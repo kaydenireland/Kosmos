@@ -27,7 +27,7 @@ public class World {
     }
 
     public void loadChunk(Vector3 position) {
-        if(!chunks.containsKey(position) && position.getY() >= -4) {
+        if(!chunks.containsKey(position) && position.getY() >= -8) {
             Chunk newChunk = new Chunk(atlas, Position.chunkToWorldPos(position));
             terrainGenerator.generateChunk(newChunk, position);
             chunks.put(position, newChunk);
