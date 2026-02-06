@@ -17,8 +17,17 @@ public class TerrainGenerator {
                 int worldX = (int) chunkPos.getX() * chunk.SIZE + x;
                 int worldZ = (int) chunkPos.getZ() * chunk.SIZE + z;
 
-                double noiseValue = noise.noise(worldX * 0.01, worldZ * 0.01);
-                int surfaceHeight = (int) ((noiseValue * 0.5 + 0.5) * 16 - 8); // Range: -8 to 8 (centered at 0)
+                double frequency1 = 0.01;   // Large features (hills)
+                double frequency2 = 0.05;   // Medium features (slopes)
+                double frequency3 = 0.1;    // Small features (detail)
+
+                double noise1 = noise.noise(worldX * frequency1, worldZ * frequency1);
+                double noise2 = noise.noise(worldX * frequency2, worldZ * frequency2);
+                double noise3 = noise.noise(worldX * frequency3, worldZ * frequency3);
+
+                double noiseValue = (noise1 * 0.6) + (noise2 * 0.3) + (noise3 * 0.1);
+
+                int surfaceHeight = (int) ((noiseValue * 0.5 + 0.5) * 72 - 8); // Range: -8 to 64 (centered at 0)
 
                 for (int y = 0; y < chunk.SIZE; y++) {
                     int worldY = (int) chunkPos.getY() * chunk.SIZE + y;

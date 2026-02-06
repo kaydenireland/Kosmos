@@ -5,7 +5,9 @@ import org.lwjgl.glfw.*;
 public class Input {
 
     private static boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
+    private static boolean[] lastKeys = new boolean[GLFW.GLFW_KEY_LAST];
     private static boolean[] buttons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
+    private static boolean[] lastButtons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
     private static double mouseX, mouseY;
     private static double scrollX, scrollY;
 
@@ -42,20 +44,43 @@ public class Input {
         };
     }
 
+    public static void update() {
+        System.arraycopy(keys, 0, lastKeys, 0, keys.length);
+        System.arraycopy(buttons, 0, lastButtons, 0, buttons.length);
+
+        scrollX = 0;
+        scrollY = 0;
+    }
+
+    // Keys
+
     public static boolean isKeyDown(int key) {
         return keys[key];
     }
+
+    public static boolean isKeyPressed(int key) {
+        return keys[key] && !lastKeys[key];
+    }
+
+    public static boolean isKeyReleased(int key) {
+        return !keys[key] && lastKeys[key];
+    }
+
+    // Buttons
 
     public static boolean isButtonDown(int button) {
         return buttons[button];
     }
 
-    public void destroy() {
-        keyboard.free();
-        mouseMove.free();
-        mouseButtons.free();
-        mouseScroll.free();
+    public static boolean isButtonPressed(int button) {
+        return buttons[button] && !lastButtons[button];
     }
+
+    public static boolean isButtonReleased(int button) {
+        return !buttons[button] && lastButtons[button];
+    }
+
+    // Mouse
 
     public static double getMouseX() {
         return mouseX;
@@ -73,6 +98,8 @@ public class Input {
         return scrollY;
     }
 
+    // Callbacks
+
     public GLFWKeyCallback getKeyboardCallback() {
         return keyboard;
     }
@@ -87,6 +114,13 @@ public class Input {
 
     public GLFWScrollCallback getMouseScrollCallback() {
         return mouseScroll;
+    }
+
+    public void destroy() {
+        keyboard.free();
+        mouseMove.free();
+        mouseButtons.free();
+        mouseScroll.free();
     }
 
 }

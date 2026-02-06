@@ -9,6 +9,7 @@ import main.java.net.kallen.engine.math.Vector3;
 import main.java.net.kallen.engine.objects.FirstPersonCamera;
 import main.java.net.kallen.kosmos.entity.Gamemode;
 import main.java.net.kallen.kosmos.entity.Player;
+import main.java.net.kallen.kosmos.render.ModelRegistry;
 import main.java.net.kallen.kosmos.util.ResourceLocation;
 import main.java.net.kallen.kosmos.texture.TextureAtlas;
 import main.java.net.kallen.kosmos.world.BlockRegistry;
@@ -60,12 +61,13 @@ public class Kosmos implements Runnable {
         window.mouseState(true);
         shader.create();
 
-        blockAtlas = new TextureAtlas(16, BlockRegistry.getAllTextures());
-        player = new Player(new Vector3(0, 80, 0));
+        blockAtlas = new TextureAtlas(16, ModelRegistry.getAllTextures());
+        player = new Player(new Vector3(0, 50, 0));
         camera = new FirstPersonCamera(new Vector3(player.getPosition()), new Vector3(0f, 0f,0f));
         world = new World(blockAtlas, 999);
         world.updateChunks(player);
         world.update();
+        player.setGamemode(Gamemode.SURVIVAL);
 
         renderer = new Renderer(window, shader, camera);
 
@@ -104,17 +106,19 @@ public class Kosmos implements Runnable {
                 System.out.println("Player chunk: " + player.getChunkPosition().toString());
                 System.out.println("Loaded Chunks: " + world.getLoadedChunkCount());
             }
-            if (Input.isKeyDown(GLFW.GLFW_KEY_F5)) thirdPerson = !thirdPerson;
-            if (Input.isKeyDown(GLFW.GLFW_KEY_F11)) window.setFullscreen(!window.isFullscreen());
-            if (Input.isKeyDown(GLFW.GLFW_KEY_L)) window.mouseState(!window.getMouseLock());
-            if (Input.isKeyDown(GLFW.GLFW_KEY_EQUAL)) checkGlError();
+            if (Input.isKeyPressed(GLFW.GLFW_KEY_F5)) thirdPerson = !thirdPerson;
+            if (Input.isKeyPressed(GLFW.GLFW_KEY_F11)) window.setFullscreen(!window.isFullscreen());
+            if (Input.isKeyPressed(GLFW.GLFW_KEY_L)) window.mouseState(!window.getMouseLock());
+            if (Input.isKeyPressed(GLFW.GLFW_KEY_EQUAL)) checkGlError();
 
-            if (Input.isKeyDown(GLFW.GLFW_KEY_F)) player.setFlying(!player.isFlying());
+            if (Input.isKeyPressed(GLFW.GLFW_KEY_F)) player.setFlying(!player.isFlying());
 
             // Game Mode Toggles
-            if (Input.isKeyDown(GLFW.GLFW_KEY_KP_0)) player.setGamemode(Gamemode.SURVIVAL);
-            if (Input.isKeyDown(GLFW.GLFW_KEY_KP_1)) player.setGamemode(Gamemode.CREATIVE);
-            if (Input.isKeyDown(GLFW.GLFW_KEY_KP_2)) player.setGamemode(Gamemode.SPECTATOR);
+            if (Input.isKeyPressed(GLFW.GLFW_KEY_KP_0)) player.setGamemode(Gamemode.SURVIVAL);
+            if (Input.isKeyPressed(GLFW.GLFW_KEY_KP_1)) player.setGamemode(Gamemode.CREATIVE);
+            if (Input.isKeyPressed(GLFW.GLFW_KEY_KP_2)) player.setGamemode(Gamemode.SPECTATOR);
+
+            Input.update();
 
         }
         close();

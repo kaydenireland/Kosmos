@@ -17,9 +17,10 @@ public class Physics {
 
     public static void applyPhysics(Entity entity, World world) {
 
-        if (entity.noClip()) return;
-        applyGravity(entity);
-        checkBlockCollisions(entity, world);
+        if (!entity.noClip()) {
+            applyGravity(entity);
+            checkBlockCollisions(entity, world);
+        }
         moveEntity(entity);
         applyFriction(entity);
 

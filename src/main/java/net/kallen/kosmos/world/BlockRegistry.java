@@ -31,11 +31,19 @@ public class BlockRegistry {
             BlockProperties.create()));
     public static final byte BEDROCK = register("bedrock", new Block(
             BlockProperties.create()));
+    public static final byte OAK_LOG = register("oak_log", new Block(
+            BlockProperties.create()));
     public static final byte OAK_PLANKS = register("oak_planks", new Block(
             BlockProperties.create()));
+    public static final byte ASH = register("ash", new Block(
+            BlockProperties.create().transparent()));
+    public static final byte MOSS = register("moss", new Block(
+            BlockProperties.create().transparent()));
     public static final byte GLASS = register("glass", new Block(
             BlockProperties.create().transparent()));
     public static final byte TINTED_GLASS = register("tinted_glass", new Block(
+            BlockProperties.create().transparent()));
+    public static final byte GOLDEN_GLASS = register("golden_glass", new Block(
             BlockProperties.create().transparent()));
     public static final byte WHITE_WOOl = register("white_wool", new Block(
             BlockProperties.create()));
@@ -69,6 +77,7 @@ public class BlockRegistry {
         return null;
     }
 
+    @Deprecated
     public static String[] getAllTextures() {
 
         ArrayList<String> list = new ArrayList<>();

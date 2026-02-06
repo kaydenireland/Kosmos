@@ -31,8 +31,6 @@ public class ChunkMesh {
     private final ArrayList<Integer> transparentIndices = new ArrayList<>();
     private int transparentOffset;
 
-    private float[] uvs;
-
     public ChunkMesh(Chunk chunk, Vector3 position, TextureAtlas atlas) {
         this.chunk = chunk;
         this.position = position;
@@ -53,9 +51,7 @@ public class ChunkMesh {
 
     public void generateMesh() {
         clearMeshData();
-
         buildGeometry();
-
         createMeshes();
     }
 
@@ -77,24 +73,25 @@ public class ChunkMesh {
                     if (blockId == BlockRegistry.AIR) continue;
 
                     Block block = BlockRegistry.getBlockFromId(blockId);
-                    boolean isTransparent = !block.isOpaque();
+                    String blockName = BlockRegistry.getNameFromId(blockId);
+                    BlockModel model = ModelRegistry.getModel(blockName);
 
-                    uvs = atlas.getUVs(BlockRegistry.getNameFromId(blockId));
+                    boolean isTransparent = !block.isOpaque();
 
                     Vector3 pos = new Vector3(x, y, z);
 
-                    addFaceIfVisible(pos, Direction.NORTH, isTransparent);
-                    addFaceIfVisible(pos, Direction.SOUTH, isTransparent);
-                    addFaceIfVisible(pos, Direction.EAST, isTransparent);
-                    addFaceIfVisible(pos, Direction.WEST, isTransparent);
-                    addFaceIfVisible(pos, Direction.ABOVE, isTransparent);
-                    addFaceIfVisible(pos, Direction.BELOW, isTransparent);
+                    addFaceIfVisible(pos, Direction.NORTH, model, isTransparent);
+                    addFaceIfVisible(pos, Direction.SOUTH, model, isTransparent);
+                    addFaceIfVisible(pos, Direction.EAST, model, isTransparent);
+                    addFaceIfVisible(pos, Direction.WEST, model, isTransparent);
+                    addFaceIfVisible(pos, Direction.ABOVE, model, isTransparent);
+                    addFaceIfVisible(pos, Direction.BELOW, model, isTransparent);
                 }
             }
         }
     }
 
-    private void addFaceIfVisible(Vector3 pos, Direction direction, boolean isTransparent) {
+    private void addFaceIfVisible(Vector3 pos, Direction direction, BlockModel model, boolean isTransparent) {
         int x = (int) pos.getX();
         int y = (int) pos.getY();
         int z = (int) pos.getZ();
@@ -106,7 +103,10 @@ public class ChunkMesh {
 
         Vector3[] faceVertices = getFaceVertices(x, y, z, direction);
 
-        addFace(faceVertices[0], faceVertices[1], faceVertices[2], faceVertices[3], isTransparent);
+        String textureName = model.getTextureForFace(direction);
+        float[] uvs = atlas.getUVs(textureName);
+
+        addFace(faceVertices[0], faceVertices[1], faceVertices[2], faceVertices[3], uvs, isTransparent);
     }
 
     private Vector3[] getFaceVertices(int x, int y, int z, Direction direction) {
@@ -174,8 +174,7 @@ public class ChunkMesh {
         return currentBlock.isOpaque() || currentId != neighborId;
     }
 
-    private void addFace(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, boolean isTransparent) {
-
+    private void addFace(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, float[] uvs, boolean isTransparent) {
         ArrayList<Vertex> vertices = isTransparent ? transparentVertices : opaqueVertices;
         ArrayList<Integer> indices = isTransparent ? transparentIndices : opaqueIndices;
         int offset = isTransparent ? transparentOffset : opaqueOffset;
