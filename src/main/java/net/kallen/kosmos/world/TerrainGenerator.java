@@ -33,21 +33,27 @@ public class TerrainGenerator {
         }
     }
 
-    private byte determineBlockType(int worldX, int worldY, int worldZ) {
+    private byte determineBlockType(int x, int y, int z) {
 
-        if (worldY == -128) {
+        if (y == -128) {
             return Blocks.BEDROCK;
         }
 
         var frequency = 0.1f;
         var amplitude = 10;
 
-        var xOffset = Math.sin(worldX * frequency) * amplitude;
-        var zOffset = Math.sin(worldZ * frequency) * amplitude;
+        var xOffset = Math.sin(x * frequency) * amplitude;
+        var zOffset = Math.sin(z * frequency) * amplitude;
 
         var surfaceY = SEA_LEVEL + xOffset + zOffset;
 
-        return  (worldY < surfaceY) ? Blocks.STONE : Blocks.AIR;
+        if (y < surfaceY) {
+            return Blocks.STONE;
+        } else if (y < SEA_LEVEL) {
+            return Blocks.BLUE_STAINED_GLASS;
+        } else {
+            return Blocks.AIR;
+        }
 
     }
 
