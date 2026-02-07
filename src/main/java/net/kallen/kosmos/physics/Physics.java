@@ -20,7 +20,12 @@ public class Physics {
         if (!entity.noClip()) {
             applyGravity(entity);
             checkBlockCollisions(entity, world);
+        } else {
+            AABB box = entity.getBoundingBox();
+            Vector3 vel = entity.getVelocity();
+            entity.setBoundingBox(box.offset(vel.getX(), vel.getY(), vel.getZ()));
         }
+
         moveEntity(entity);
         applyFriction(entity);
 
@@ -66,9 +71,6 @@ public class Physics {
 
     public static ArrayList<AABB> getBlockBoxes(AABB targetBox, World world) {
         ArrayList<AABB> blockBoxes = new ArrayList<>();
-
-        Vector3 min = targetBox.min;
-        Vector3 max = Vector3.add(targetBox.max, new Vector3(1f, 1f, 1f));
 
         int minX = (int) Math.floor(targetBox.min.getX()) - 1;
         int maxX = (int) Math.ceil(targetBox.max.getX()) + 1;
