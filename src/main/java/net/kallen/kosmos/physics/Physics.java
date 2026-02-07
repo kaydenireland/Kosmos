@@ -3,7 +3,7 @@ package main.java.net.kallen.kosmos.physics;
 import main.java.net.kallen.engine.math.Vector3;
 import main.java.net.kallen.engine.physics.AABB;
 import main.java.net.kallen.kosmos.entity.Entity;
-import main.java.net.kallen.kosmos.world.BlockRegistry;
+import main.java.net.kallen.kosmos.world.Blocks;
 import main.java.net.kallen.kosmos.world.World;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class Physics {
             for (int y = minY; y < maxY; y++) {
                 for (int z = minZ; z < maxZ; z++) {
                     byte blockId = world.getBlock(new Vector3(x, y, z));
-                    if (blockId != 0 && BlockRegistry.getBlockFromId(blockId).isSolid()) {
+                    if (blockId != 0 && Blocks.getBlockFromId(blockId).isSolid()) {
                         blockBoxes.add(new AABB(x, y, z, x + 1, y + 1, z + 1));
                     }
                 }

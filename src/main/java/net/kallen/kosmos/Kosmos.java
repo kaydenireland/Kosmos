@@ -12,11 +12,9 @@ import main.java.net.kallen.kosmos.entity.Player;
 import main.java.net.kallen.kosmos.render.ModelRegistry;
 import main.java.net.kallen.kosmos.util.ResourceLocation;
 import main.java.net.kallen.kosmos.texture.TextureAtlas;
-import main.java.net.kallen.kosmos.world.BlockRegistry;
 import main.java.net.kallen.kosmos.world.World;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLUtil;
 
 import javax.swing.*;
 
@@ -44,6 +42,8 @@ public class Kosmos implements Runnable {
     public void start() {
         gameThread = new Thread(this,"game");
         gameThread.start();
+
+
     }
 
     public void init() {
@@ -62,12 +62,12 @@ public class Kosmos implements Runnable {
         shader.create();
 
         blockAtlas = new TextureAtlas(16, ModelRegistry.getAllTextures());
-        player = new Player(new Vector3(0, 50, 0));
+        player = new Player(new Vector3(0, 5, 0));
         camera = new FirstPersonCamera(new Vector3(player.getPosition()), new Vector3(0f, 0f,0f));
         world = new World(blockAtlas, 999);
         world.updateChunks(player);
         world.update();
-        player.setGamemode(Gamemode.SURVIVAL);
+        player.setGamemode(Gamemode.CREATIVE);
 
         renderer = new Renderer(window, shader, camera);
 

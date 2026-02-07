@@ -121,7 +121,7 @@ public class World {
     public byte getBlock(Vector3 worldPos) {
         Vector3 chunkPos = Position.worldToChunkPos(worldPos);
         Chunk chunk = chunks.get(chunkPos);
-        if (chunk == null) return BlockRegistry.AIR;
+        if (chunk == null) return Blocks.AIR;
 
         int localX = Math.floorMod((int) worldPos.getX(), 16);
         int localY = Math.floorMod((int) worldPos.getY(), 16);

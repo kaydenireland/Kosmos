@@ -8,7 +8,7 @@ import main.java.net.kallen.engine.math.Vector3;
 import main.java.net.kallen.kosmos.texture.AtlasMaterial;
 import main.java.net.kallen.kosmos.texture.TextureAtlas;
 import main.java.net.kallen.kosmos.world.Block;
-import main.java.net.kallen.kosmos.world.BlockRegistry;
+import main.java.net.kallen.kosmos.world.Blocks;
 import main.java.net.kallen.kosmos.world.Chunk;
 import main.java.net.kallen.kosmos.world.Direction;
 
@@ -70,10 +70,10 @@ public class ChunkMesh {
                 for (int z = 0; z < chunk.SIZE; z++) {
                     byte blockId = chunk.getBlock(x, y, z);
 
-                    if (blockId == BlockRegistry.AIR) continue;
+                    if (blockId == Blocks.AIR) continue;
 
-                    Block block = BlockRegistry.getBlockFromId(blockId);
-                    String blockName = BlockRegistry.getNameFromId(blockId);
+                    Block block = Blocks.getBlockFromId(blockId);
+                    String blockName = Blocks.getNameFromId(blockId);
                     BlockModel model = ModelRegistry.getModel(blockName);
 
                     boolean isTransparent = !block.isOpaque();
@@ -164,10 +164,10 @@ public class ChunkMesh {
 
         byte neighborId = chunk.getBlock(nx, ny, nz);
 
-        if (neighborId == BlockRegistry.AIR) return true;
+        if (neighborId == Blocks.AIR) return true;
 
-        Block currentBlock = BlockRegistry.getBlockFromId(currentId);
-        Block neighborBlock = BlockRegistry.getBlockFromId(neighborId);
+        Block currentBlock = Blocks.getBlockFromId(currentId);
+        Block neighborBlock = Blocks.getBlockFromId(neighborId);
 
         if (neighborBlock.isOpaque()) return false;
 

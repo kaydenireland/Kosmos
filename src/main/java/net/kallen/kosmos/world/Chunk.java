@@ -18,20 +18,6 @@ public class Chunk {
         dirty = true;
     }
 
-    @Deprecated
-    public void generateTerrain() {
-        for (int x = 0; x < SIZE; x++) {
-            for (int y = 0; y < SIZE; y++) {
-                for (int z = 0; z < SIZE; z++) {
-                    if (y == 15) blocks.set(x, y, z, (byte) 0);
-                    else if (y == 14) blocks.set(x, y, z, (byte) 2);
-                    else if (y == 13) blocks.set(x, y, z, (byte) 1);
-                    else blocks.set(x, y, z, (byte) 5);
-                }
-            }
-        }
-    }
-
     public void update() {
         if (dirty) {
             chunkMesh.generateMesh();

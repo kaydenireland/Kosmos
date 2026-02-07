@@ -2,7 +2,7 @@ package main.java.net.kallen.kosmos.render;
 
 import main.java.net.kallen.kosmos.Kosmos;
 import main.java.net.kallen.kosmos.util.ResourceLocation;
-import main.java.net.kallen.kosmos.world.BlockRegistry;
+import main.java.net.kallen.kosmos.world.Blocks;
 import main.java.net.kallen.kosmos.world.Direction;
 
 import java.util.*;
@@ -12,72 +12,76 @@ public class ModelRegistry {
     private static final Map<String, BlockModel> models = new HashMap<>();
 
     static {
-        registerModel(new BlockModel.Builder(BlockRegistry.AIR)
+        registerModel(new BlockModel.Builder(Blocks.AIR)
                 .allFaces("air")
                 .build());
 
 
-        registerModel(new BlockModel.Builder(BlockRegistry.DIRT)
+        registerModel(new BlockModel.Builder(Blocks.DIRT)
                 .allFaces("dirt")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.GRASS)
+        registerModel(new BlockModel.Builder(Blocks.GRASS)
                 .topBottomSides("grass_top", "dirt", "grass_side")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.MUD)
+        registerModel(new BlockModel.Builder(Blocks.MUD)
                 .allFaces("mud")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.STONE)
+        registerModel(new BlockModel.Builder(Blocks.STONE)
                 .allFaces("stone")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.COBBLESTONE)
+        registerModel(new BlockModel.Builder(Blocks.COBBLESTONE)
                 .allFaces("cobblestone")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.DEEPSLATE)
+        registerModel(new BlockModel.Builder(Blocks.DEEPSLATE)
                 .allFaces("deepslate")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.OBSIDIAN)
+        registerModel(new BlockModel.Builder(Blocks.OBSIDIAN)
                 .allFaces("obsidian")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.BEDROCK)
+        registerModel(new BlockModel.Builder(Blocks.BEDROCK)
                 .allFaces("bedrock")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.OAK_LOG)
+        registerModel(new BlockModel.Builder(Blocks.OAK_LOG)
                 .pillar("oak_log_top", "oak_log")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.OAK_PLANKS)
+        registerModel(new BlockModel.Builder(Blocks.OAK_PLANKS)
                 .allFaces("oak_planks")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.ASH)
+        registerModel(new BlockModel.Builder(Blocks.ASH)
                 .allFaces("ash")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.MOSS)
+        registerModel(new BlockModel.Builder(Blocks.MOSS)
                 .allFaces("moss")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.GLASS)
+        registerModel(new BlockModel.Builder(Blocks.GLASS)
                 .allFaces("glass")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.TINTED_GLASS)
+        registerModel(new BlockModel.Builder(Blocks.BLUE_STAINED_GLASS)
+                .allFaces("blue_stained_glass")
+                .build());
+
+        registerModel(new BlockModel.Builder(Blocks.TINTED_GLASS)
                 .allFaces("tinted_glass")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.GOLDEN_GLASS)
+        registerModel(new BlockModel.Builder(Blocks.GOLDEN_GLASS)
                 .allFaces("golden_glass")
                 .build());
 
-        registerModel(new BlockModel.Builder(BlockRegistry.WHITE_WOOl)
+        registerModel(new BlockModel.Builder(Blocks.WHITE_WOOl)
                 .allFaces("white_wool")
                 .build());
     }

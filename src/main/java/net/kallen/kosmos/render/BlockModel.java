@@ -1,6 +1,6 @@
 package main.java.net.kallen.kosmos.render;
 
-import main.java.net.kallen.kosmos.world.BlockRegistry;
+import main.java.net.kallen.kosmos.world.Blocks;
 import main.java.net.kallen.kosmos.world.Direction;
 
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class BlockModel {
         private final Map<Direction, String> faceTextures = new HashMap<>();
 
         public Builder(Byte id) {
-            this.id = BlockRegistry.getNameFromId(id);
+            this.id = Blocks.getNameFromId(id);
         }
 
         public Builder allFaces(String texture) {

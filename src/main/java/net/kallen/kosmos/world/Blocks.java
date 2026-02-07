@@ -7,46 +7,48 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlockRegistry {
+public class Blocks {
     private static final Map<Byte, Block> ID_TO_TYPE = new HashMap<>();
     private static final Map<String, Byte> NAME_TO_ID = new HashMap<>();
     private static byte nextId = 0;
 
     // Block type IDs
     public static final byte AIR = register("air", new Block(
-            BlockProperties.create().transparent().solid(false)));
+            Properties.create().transparent().solid(false)));
     public static final byte DIRT = register("dirt", new Block(
-            BlockProperties.create()));
+            Properties.create()));
     public static final byte GRASS = register("grass", new Block(
-            BlockProperties.create()));
+            Properties.create()));
     public static final byte MUD = register("mud", new Block(
-            BlockProperties.create()));
+            Properties.create()));
     public static final byte STONE = register("stone", new Block(
-            BlockProperties.create()));
+            Properties.create()));
     public static final byte COBBLESTONE = register("cobblestone", new Block(
-            BlockProperties.create()));
+            Properties.create()));
     public static final byte DEEPSLATE = register("deepslate", new Block(
-            BlockProperties.create()));
+            Properties.create()));
     public static final byte OBSIDIAN = register("obsidian", new Block(
-            BlockProperties.create()));
+            Properties.create()));
     public static final byte BEDROCK = register("bedrock", new Block(
-            BlockProperties.create()));
+            Properties.create()));
     public static final byte OAK_LOG = register("oak_log", new Block(
-            BlockProperties.create()));
+            Properties.create()));
     public static final byte OAK_PLANKS = register("oak_planks", new Block(
-            BlockProperties.create()));
+            Properties.create()));
     public static final byte ASH = register("ash", new Block(
-            BlockProperties.create().transparent()));
+            Properties.create().transparent()));
     public static final byte MOSS = register("moss", new Block(
-            BlockProperties.create().transparent()));
+            Properties.create().transparent()));
     public static final byte GLASS = register("glass", new Block(
-            BlockProperties.create().transparent()));
+            Properties.create().transparent()));
+    public static final byte BLUE_STAINED_GLASS = register("blue_stained_glass", new Block(
+            Properties.create().transparent()));
     public static final byte TINTED_GLASS = register("tinted_glass", new Block(
-            BlockProperties.create().transparent()));
+            Properties.create().transparent()));
     public static final byte GOLDEN_GLASS = register("golden_glass", new Block(
-            BlockProperties.create().transparent()));
+            Properties.create().transparent()));
     public static final byte WHITE_WOOl = register("white_wool", new Block(
-            BlockProperties.create()));
+            Properties.create()));
 
 
     private static byte register(String name, Block block) {
