@@ -1,35 +1,59 @@
 package main.java.net.kallen.engine.math;
+
 import java.util.Arrays;
 
 public class ByteArray3D {
-    private Vector3 size;
-    private Byte[][][] array;
+
+    private final int sizeX;
+    private final int sizeY;
+    private final int sizeZ;
+
+    private final Byte[] data;
 
     public ByteArray3D(int size) {
-        this.size = new Vector3(size, size, size);
-        array = new Byte[size][size][size];
+        this(size, size, size);
     }
 
     public ByteArray3D(int x, int y, int z) {
-        this.size = new Vector3(x, y, z);
-        array = new Byte[z][y][x];
+        this.sizeX = x;
+        this.sizeY = y;
+        this.sizeZ = z;
+        this.data = new Byte[x * y * z];
+    }
+
+    private int index(int x, int y, int z) {
+        return x + (y * sizeX) + (z * sizeX * sizeY);
     }
 
     public Byte get(int x, int y, int z) {
-        return array[x][y][z];
+        checkBounds(x, y, z);
+        return data[index(x, y, z)];
     }
 
     public void set(int x, int y, int z, Byte value) {
-        if (z >= 0 && z < size.getZ() && y >= 0 && y < size.getY() && x >= 0 && x < size.getX()) {
-            array[z][y][x] = value;
-        } else {
+        checkBounds(x, y, z);
+        data[index(x, y, z)] = value;
+    }
+
+    private void checkBounds(int x, int y, int z) {
+        if (x < 0 || x >= sizeX || y < 0 || y >= sizeY || z < 0 || z >= sizeZ) {
             throw new IndexOutOfBoundsException("Indices out of bounds: (" + x + ", " + y + ", " + z + ")");
         }
     }
-
     @Override
     public String toString() {
-        return Arrays.deepToString(array);
+        return Arrays.toString(data);
+    }
+
+    public int getSizeX() {
+        return sizeX;
+    }
+
+    public int getSizeY() {
+        return sizeY;
+    }
+
+    public int getSizeZ() {
+        return sizeZ;
     }
 }
-
