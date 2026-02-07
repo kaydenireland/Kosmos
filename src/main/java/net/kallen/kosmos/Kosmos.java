@@ -67,7 +67,7 @@ public class Kosmos implements Runnable {
         world = new World(blockAtlas, 999);
         world.updateChunks(player);
         world.update();
-        player.setGamemode(Gamemode.CREATIVE);
+        player.setGamemode(Gamemode.SPECTATOR);
 
         renderer = new Renderer(window, shader, camera);
 
