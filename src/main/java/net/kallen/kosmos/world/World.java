@@ -1,9 +1,9 @@
 package main.java.net.kallen.kosmos.world;
 
-import main.java.net.kallen.engine.graphics.Renderer;
-import main.java.net.kallen.engine.math.Vector3;
+import main.java.net.kallen.solaris.graphics.Renderer;
+import main.java.net.kallen.solaris.math.vector.Vector3;
 import main.java.net.kallen.kosmos.entity.Player;
-import main.java.net.kallen.kosmos.texture.TextureAtlas;
+import main.java.net.kallen.solaris.graphics.TextureAtlas;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class World {
 
     public void loadChunk(Vector3 position) {
         if(!chunks.containsKey(position) && position.getY() >= -8) {
-            Chunk newChunk = new Chunk(atlas, Position.chunkToWorldPos(position));
+            Chunk newChunk = new Chunk(atlas, BlockPosition.chunkToWorldPos(position));
             terrainGenerator.generateChunk(newChunk, position);
             chunks.put(position, newChunk);
             // System.out.println("Loaded chunk at " + position + " (Total: " + chunks.size() + ")");
@@ -119,7 +119,7 @@ public class World {
     }
 
     public byte getBlock(Vector3 worldPos) {
-        Vector3 chunkPos = Position.worldToChunkPos(worldPos);
+        Vector3 chunkPos = BlockPosition.worldToChunkPos(worldPos);
         Chunk chunk = chunks.get(chunkPos);
         if (chunk == null) return Blocks.AIR;
 
@@ -131,7 +131,7 @@ public class World {
     }
 
     public void setBlock(Vector3 worldPos, byte blockId) {
-        Vector3 chunkPos = Position.worldToChunkPos(worldPos);
+        Vector3 chunkPos = BlockPosition.worldToChunkPos(worldPos);
         Chunk chunk = chunks.get(chunkPos);
 
         if (chunk != null) {

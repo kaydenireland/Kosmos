@@ -1,7 +1,7 @@
 package main.java.net.kallen.kosmos.physics;
 
-import main.java.net.kallen.engine.math.Vector3;
-import main.java.net.kallen.engine.physics.AABB;
+import main.java.net.kallen.solaris.math.vector.Vector3;
+import main.java.net.kallen.solaris.physics.AABB;
 import main.java.net.kallen.kosmos.entity.Entity;
 import main.java.net.kallen.kosmos.world.Blocks;
 import main.java.net.kallen.kosmos.world.World;

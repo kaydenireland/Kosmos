@@ -1,7 +1,7 @@
 package main.java.net.kallen.kosmos.render;
 
 import main.java.net.kallen.kosmos.world.Blocks;
-import main.java.net.kallen.kosmos.world.Direction;
+import main.java.net.kallen.solaris.position.Direction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,8 +39,8 @@ public class BlockModel {
         }
 
         public Builder topBottomSides(String top, String bottom, String sides) {
-            faceTextures.put(Direction.ABOVE, top);
-            faceTextures.put(Direction.BELOW, bottom);
+            faceTextures.put(Direction.UP, top);
+            faceTextures.put(Direction.DOWN, bottom);
             faceTextures.put(Direction.NORTH, sides);
             faceTextures.put(Direction.SOUTH, sides);
             faceTextures.put(Direction.EAST, sides);
@@ -49,8 +49,8 @@ public class BlockModel {
         }
 
         public Builder pillar(String horizontal, String sides) {
-            faceTextures.put(Direction.ABOVE, horizontal);
-            faceTextures.put(Direction.BELOW, horizontal);
+            faceTextures.put(Direction.UP, horizontal);
+            faceTextures.put(Direction.DOWN, horizontal);
             faceTextures.put(Direction.NORTH, sides);
             faceTextures.put(Direction.SOUTH, sides);
             faceTextures.put(Direction.EAST, sides);

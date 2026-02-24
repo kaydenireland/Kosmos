@@ -1,8 +1,8 @@
 package main.java.net.kallen.kosmos.entity;
 
-import main.java.net.kallen.engine.io.Input;
-import main.java.net.kallen.engine.math.Vector2;
-import main.java.net.kallen.engine.math.Vector3;
+import main.java.net.kallen.solaris.io.Input;
+import main.java.net.kallen.solaris.math.vector.Vector2;
+import main.java.net.kallen.solaris.math.vector.Vector3;
 import main.java.net.kallen.kosmos.physics.Physics;
 import main.java.net.kallen.kosmos.world.World;
 import org.lwjgl.glfw.GLFW;

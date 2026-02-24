@@ -1,15 +1,14 @@
 package main.java.net.kallen.kosmos.world;
 
-import main.java.net.kallen.engine.graphics.Renderer;
-import main.java.net.kallen.engine.math.ByteArray3D;
-import main.java.net.kallen.engine.math.Vector3;
+import main.java.net.kallen.solaris.graphics.Renderer;
+import main.java.net.kallen.solaris.math.vector.Vector3;
 import main.java.net.kallen.kosmos.render.ChunkMesh;
-import main.java.net.kallen.kosmos.texture.TextureAtlas;
+import main.java.net.kallen.solaris.graphics.TextureAtlas;
 
 public class Chunk {
 
     public final int SIZE = 16;
-    private ByteArray3D blocks = new ByteArray3D(SIZE);
+    private byte[] blocks = new byte[SIZE * SIZE * SIZE];
     public ChunkMesh chunkMesh;
     private boolean dirty;
 
@@ -37,16 +36,25 @@ public class Chunk {
         chunkMesh.destroy();
     }
 
-    public byte getBlock(int x, int y, int z) {
-        return blocks.get(x, y, z);
+    public Byte getBlock(int x, int y, int z) {
+        checkBounds(x, y, z);
+        return blocks[index(x, y, z)];
     }
 
     public void setBlock(int x, int y, int z, byte blockId) {
-        blocks.set(x, y, z, blockId);
+        checkBounds(x, y, z);
+        blocks[index(x, y, z)] = blockId;
         dirty = true;
     }
 
+    private void checkBounds(int x, int y, int z) {
+        if (x < 0 || x >= SIZE || y < 0 || y >= SIZE || z < 0 || z >= SIZE) {
+            throw new IndexOutOfBoundsException("Indices out of bounds: (" + x + ", " + y + ", " + z + ")");
+        }
+    }
 
-
+    private int index(int x, int y, int z) {
+        return (int) (x + (y * SIZE) + (z * SIZE * SIZE));
+    }
 
 }

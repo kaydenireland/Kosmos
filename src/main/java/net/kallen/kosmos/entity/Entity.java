@@ -1,8 +1,8 @@
 package main.java.net.kallen.kosmos.entity;
 
-import main.java.net.kallen.engine.math.Vector2;
-import main.java.net.kallen.engine.math.Vector3;
-import main.java.net.kallen.engine.physics.AABB;
+import main.java.net.kallen.solaris.math.vector.Vector2;
+import main.java.net.kallen.solaris.math.vector.Vector3;
+import main.java.net.kallen.solaris.physics.AABB;
 import main.java.net.kallen.kosmos.world.World;
 
 public class Entity {

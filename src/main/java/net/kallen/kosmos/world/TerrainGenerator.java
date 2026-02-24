@@ -1,19 +1,17 @@
 package main.java.net.kallen.kosmos.world;
 
-import main.java.net.kallen.engine.math.Vector3;
-import main.java.net.kallen.engine.noise.PerlinNoiseGenerator;
-
-import java.util.Random;
+import main.java.net.kallen.solaris.math.vector.Vector3;
+import main.java.net.kallen.solaris.noise.PerlinNoise;
 
 public class TerrainGenerator {
 
-    private final PerlinNoiseGenerator noise;
+    private final PerlinNoise noise;
 
     private static final int SEA_LEVEL = 0;
 
 
     public TerrainGenerator(double seed) {
-        this.noise = new PerlinNoiseGenerator(seed);
+        this.noise = new PerlinNoise(seed);
     }
 
     public void generateChunk(Chunk chunk, Vector3 chunkPos) {

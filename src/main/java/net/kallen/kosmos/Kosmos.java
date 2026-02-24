@@ -1,19 +1,19 @@
 package main.java.net.kallen.kosmos;
 
-import main.java.net.kallen.engine.graphics.*;
-import main.java.net.kallen.engine.graphics.Renderer;
-import main.java.net.kallen.engine.io.Input;
-import main.java.net.kallen.engine.io.Window;
-import main.java.net.kallen.engine.math.Vector2;
-import main.java.net.kallen.engine.math.Vector3;
-import main.java.net.kallen.engine.objects.FirstPersonCamera;
+import main.java.net.kallen.solaris.graphics.*;
+import main.java.net.kallen.solaris.graphics.Renderer;
+import main.java.net.kallen.solaris.io.Input;
+import main.java.net.kallen.solaris.io.Key;
+import main.java.net.kallen.solaris.io.Window;
+import main.java.net.kallen.solaris.math.vector.Vector2;
+import main.java.net.kallen.solaris.math.vector.Vector3;
+import main.java.net.kallen.solaris.object.camera.FirstPersonCamera;
 import main.java.net.kallen.kosmos.entity.Gamemode;
 import main.java.net.kallen.kosmos.entity.Player;
 import main.java.net.kallen.kosmos.render.ModelRegistry;
 import main.java.net.kallen.kosmos.util.ResourceLocation;
-import main.java.net.kallen.kosmos.texture.TextureAtlas;
+import main.java.net.kallen.solaris.graphics.TextureAtlas;
 import main.java.net.kallen.kosmos.world.World;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import javax.swing.*;
@@ -85,7 +85,7 @@ public class Kosmos implements Runnable {
         double previousTime = System.nanoTime() / 1_000_000_000.0;
         double accumulator = 0.0;
 
-        while (!window.shouldClose() && !Input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
+        while (!window.shouldClose() && !Input.isKeyDown(Key.ESCAPE)) {
 
             double currentTime = System.nanoTime() / 1_000_000_000.0;
             double dt = currentTime - previousTime;
@@ -100,23 +100,23 @@ public class Kosmos implements Runnable {
                 accumulator -= TICK_INTERVAL;
             }
 
-            if (Input.isKeyDown(GLFW.GLFW_KEY_F3)) {
+            if (Input.isKeyDown(Key.F3)) {
                 System.out.println("Player pos: " + player.getPosition().toString());
                 System.out.println("Player rot: " + player.getRotation().toString());
                 System.out.println("Player chunk: " + player.getChunkPosition().toString());
                 System.out.println("Loaded Chunks: " + world.getLoadedChunkCount());
             }
-            if (Input.isKeyPressed(GLFW.GLFW_KEY_F5)) thirdPerson = !thirdPerson;
-            if (Input.isKeyPressed(GLFW.GLFW_KEY_F11)) window.setFullscreen(!window.isFullscreen());
-            if (Input.isKeyPressed(GLFW.GLFW_KEY_L)) window.mouseState(!window.getMouseLock());
-            if (Input.isKeyPressed(GLFW.GLFW_KEY_EQUAL)) checkGlError();
+            if (Input.isKeyPressed(Key.F5)) thirdPerson = !thirdPerson;
+            if (Input.isKeyPressed(Key.F11)) window.setFullscreen(!window.isFullscreen());
+            if (Input.isKeyPressed(Key.L)) window.mouseState(!window.getMouseLock());
+            if (Input.isKeyPressed(Key.EQUAL)) checkGlError();
 
-            if (Input.isKeyPressed(GLFW.GLFW_KEY_F)) player.setFlying(!player.isFlying());
+            if (Input.isKeyPressed(Key.F)) player.setFlying(!player.isFlying());
 
             // Game Mode Toggles
-            if (Input.isKeyPressed(GLFW.GLFW_KEY_KP_0)) player.setGamemode(Gamemode.SURVIVAL);
-            if (Input.isKeyPressed(GLFW.GLFW_KEY_KP_1)) player.setGamemode(Gamemode.CREATIVE);
-            if (Input.isKeyPressed(GLFW.GLFW_KEY_KP_2)) player.setGamemode(Gamemode.SPECTATOR);
+            if (Input.isKeyPressed(Key.KP_0)) player.setGamemode(Gamemode.SURVIVAL);
+            if (Input.isKeyPressed(Key.KP_1)) player.setGamemode(Gamemode.CREATIVE);
+            if (Input.isKeyPressed(Key.KP_2)) player.setGamemode(Gamemode.SPECTATOR);
 
             Input.update();
 

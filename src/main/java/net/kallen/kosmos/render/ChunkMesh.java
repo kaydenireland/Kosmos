@@ -1,16 +1,16 @@
 package main.java.net.kallen.kosmos.render;
 
-import main.java.net.kallen.engine.graphics.Mesh;
-import main.java.net.kallen.engine.graphics.Renderer;
-import main.java.net.kallen.engine.graphics.Vertex;
-import main.java.net.kallen.engine.math.Vector2;
-import main.java.net.kallen.engine.math.Vector3;
-import main.java.net.kallen.kosmos.texture.AtlasMaterial;
-import main.java.net.kallen.kosmos.texture.TextureAtlas;
+import main.java.net.kallen.solaris.graphics.Mesh;
+import main.java.net.kallen.solaris.graphics.Renderer;
+import main.java.net.kallen.solaris.graphics.Vertex;
+import main.java.net.kallen.solaris.math.vector.Vector2;
+import main.java.net.kallen.solaris.math.vector.Vector3;
+import main.java.net.kallen.solaris.graphics.AtlasMaterial;
+import main.java.net.kallen.solaris.graphics.TextureAtlas;
 import main.java.net.kallen.kosmos.world.Block;
 import main.java.net.kallen.kosmos.world.Blocks;
 import main.java.net.kallen.kosmos.world.Chunk;
-import main.java.net.kallen.kosmos.world.Direction;
+import main.java.net.kallen.solaris.position.Direction;
 
 import java.util.ArrayList;
 
@@ -84,8 +84,8 @@ public class ChunkMesh {
                     addFaceIfVisible(pos, Direction.SOUTH, model, isTransparent);
                     addFaceIfVisible(pos, Direction.EAST, model, isTransparent);
                     addFaceIfVisible(pos, Direction.WEST, model, isTransparent);
-                    addFaceIfVisible(pos, Direction.ABOVE, model, isTransparent);
-                    addFaceIfVisible(pos, Direction.BELOW, model, isTransparent);
+                    addFaceIfVisible(pos, Direction.UP, model, isTransparent);
+                    addFaceIfVisible(pos, Direction.DOWN, model, isTransparent);
                 }
             }
         }
@@ -135,13 +135,13 @@ public class ChunkMesh {
                     new Vector3(x, y, z + 1),
                     new Vector3(x, y + 1, z + 1)
             };
-            case ABOVE -> new Vector3[]{
+            case UP -> new Vector3[]{
                     new Vector3(x, y + 1, z),
                     new Vector3(x, y + 1, z + 1),
                     new Vector3(x + 1, y + 1, z + 1),
                     new Vector3(x + 1, y + 1, z)
             };
-            case BELOW -> new Vector3[]{
+            case DOWN -> new Vector3[]{
                     new Vector3(x, y, z + 1),
                     new Vector3(x, y, z),
                     new Vector3(x + 1, y, z),

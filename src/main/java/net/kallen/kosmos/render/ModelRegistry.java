@@ -3,7 +3,7 @@ package main.java.net.kallen.kosmos.render;
 import main.java.net.kallen.kosmos.Kosmos;
 import main.java.net.kallen.kosmos.util.ResourceLocation;
 import main.java.net.kallen.kosmos.world.Blocks;
-import main.java.net.kallen.kosmos.world.Direction;
+import main.java.net.kallen.solaris.position.Direction;
 
 import java.util.*;
 
