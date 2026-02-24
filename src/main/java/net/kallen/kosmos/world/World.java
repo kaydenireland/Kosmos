@@ -1,5 +1,6 @@
 package main.java.net.kallen.kosmos.world;
 
+import main.java.net.kallen.kosmos.world.chunk.Chunk;
 import main.java.net.kallen.solaris.graphics.Renderer;
 import main.java.net.kallen.solaris.math.vector.Vector3;
 import main.java.net.kallen.kosmos.entity.Player;
@@ -90,7 +91,7 @@ public class World {
         for (Vector3 chunkPos : chunksToUnload) {
             Chunk chunk = chunks.remove(chunkPos);
             if (chunk != null) {
-                chunk.destroy();
+                chunk.unload();
                 // System.out.println("Unloaded chunk at " + chunkPos);
             }
         }
@@ -114,7 +115,7 @@ public class World {
 
     public void destroy() {
         for (Chunk chunk : chunks.values()) {
-            chunk.destroy();
+            chunk.unload();
         }
     }
 

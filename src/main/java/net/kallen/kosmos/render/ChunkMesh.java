@@ -1,6 +1,7 @@
 package main.java.net.kallen.kosmos.render;
 
 import main.java.net.kallen.kosmos.world.*;
+import main.java.net.kallen.kosmos.world.chunk.Chunk;
 import main.java.net.kallen.solaris.graphics.Mesh;
 import main.java.net.kallen.solaris.graphics.Renderer;
 import main.java.net.kallen.solaris.graphics.Vertex;

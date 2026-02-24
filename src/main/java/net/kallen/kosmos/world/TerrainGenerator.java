@@ -1,5 +1,6 @@
 package main.java.net.kallen.kosmos.world;
 
+import main.java.net.kallen.kosmos.world.chunk.Chunk;
 import main.java.net.kallen.solaris.math.vector.Vector3;
 import main.java.net.kallen.solaris.noise.PerlinNoise;
 
