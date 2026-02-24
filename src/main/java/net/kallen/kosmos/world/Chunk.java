@@ -12,8 +12,8 @@ public class Chunk {
     public ChunkMesh chunkMesh;
     private boolean dirty;
 
-    public Chunk(TextureAtlas atlas, Vector3 chunkPosition) {
-        chunkMesh = new ChunkMesh(this, chunkPosition, atlas);
+    public Chunk(World world, TextureAtlas atlas, Vector3 chunkPos) {
+        chunkMesh = new ChunkMesh(world, this, chunkPos, atlas);
         dirty = true;
     }
 
@@ -54,7 +54,7 @@ public class Chunk {
     }
 
     private int index(int x, int y, int z) {
-        return (int) (x + (y * SIZE) + (z * SIZE * SIZE));
+        return x + (y * SIZE) + (z * SIZE * SIZE);
     }
 
 }

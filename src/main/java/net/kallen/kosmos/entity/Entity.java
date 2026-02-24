@@ -1,5 +1,6 @@
 package main.java.net.kallen.kosmos.entity;
 
+import main.java.net.kallen.kosmos.world.BlockPosition;
 import main.java.net.kallen.solaris.math.vector.Vector2;
 import main.java.net.kallen.solaris.math.vector.Vector3;
 import main.java.net.kallen.solaris.physics.AABB;
@@ -75,19 +76,11 @@ public class Entity {
     }
 
     public Vector3 getChunkPosition() {
-        return new Vector3(
-                (int) Math.floor(position.getX() / 16),
-                (int) Math.floor(position.getY() / 16),
-                (int) Math.floor(position.getZ() / 16)
-        );
+        return BlockPosition.worldToChunkPos(position);
     }
 
     public Vector3 getLastChunkPosition() {
-        return new Vector3(
-                (int) Math.floor(lastPosition.getX() / 16),
-                (int) Math.floor(lastPosition.getY() / 16),
-                (int) Math.floor(lastPosition.getZ() / 16)
-        );
+        return BlockPosition.worldToChunkPos(lastPosition);
     }
 
     public Vector2 getSize() {

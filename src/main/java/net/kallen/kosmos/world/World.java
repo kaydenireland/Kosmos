@@ -26,12 +26,12 @@ public class World {
         this.terrainGenerator = new TerrainGenerator(this.seed);
     }
 
-    public void loadChunk(Vector3 position) {
-        if(!chunks.containsKey(position) && position.getY() >= -8) {
-            Chunk newChunk = new Chunk(atlas, BlockPosition.chunkToWorldPos(position));
-            terrainGenerator.generateChunk(newChunk, position);
-            chunks.put(position, newChunk);
-            // System.out.println("Loaded chunk at " + position + " (Total: " + chunks.size() + ")");
+    public void loadChunk(Vector3 chunkPos) {
+        if(!chunks.containsKey(chunkPos) && chunkPos.getY() >= -8) {
+            Chunk newChunk = new Chunk(this, atlas, chunkPos);
+            terrainGenerator.generateChunk(newChunk, chunkPos);
+            chunks.put(chunkPos, newChunk);
+            // System.out.println("Loaded chunk at " + chunkPos + " (Total: " + chunks.size() + ")");
         }
     }
 

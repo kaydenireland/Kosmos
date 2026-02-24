@@ -1,5 +1,6 @@
 package main.java.net.kallen.kosmos.render;
 
+import main.java.net.kallen.kosmos.world.*;
 import main.java.net.kallen.solaris.graphics.Mesh;
 import main.java.net.kallen.solaris.graphics.Renderer;
 import main.java.net.kallen.solaris.graphics.Vertex;
@@ -7,9 +8,6 @@ import main.java.net.kallen.solaris.math.vector.Vector2;
 import main.java.net.kallen.solaris.math.vector.Vector3;
 import main.java.net.kallen.solaris.graphics.AtlasMaterial;
 import main.java.net.kallen.solaris.graphics.TextureAtlas;
-import main.java.net.kallen.kosmos.world.Block;
-import main.java.net.kallen.kosmos.world.Blocks;
-import main.java.net.kallen.kosmos.world.Chunk;
 import main.java.net.kallen.solaris.position.Direction;
 
 import java.util.ArrayList;
@@ -19,8 +17,9 @@ public class ChunkMesh {
     private Mesh opaqueMesh;
     private Mesh transparentMesh;
 
+    private final World world;
     private final Chunk chunk;
-    private final Vector3 position;
+    private final Vector3 chunkPos;
     private final TextureAtlas atlas;
 
     private final ArrayList<Vertex> opaqueVertices = new ArrayList<>();
@@ -31,21 +30,22 @@ public class ChunkMesh {
     private final ArrayList<Integer> transparentIndices = new ArrayList<>();
     private int transparentOffset;
 
-    public ChunkMesh(Chunk chunk, Vector3 position, TextureAtlas atlas) {
+    public ChunkMesh(World world, Chunk chunk, Vector3 chunkPos, TextureAtlas atlas) {
+        this.world = world;
         this.chunk = chunk;
-        this.position = position;
+        this.chunkPos = chunkPos;
         this.atlas = atlas;
     }
 
     public void renderOpaque(Renderer renderer) {
         if (opaqueMesh != null) {
-            renderer.renderMesh(opaqueMesh, position);
+            renderer.renderMesh(opaqueMesh, BlockPosition.chunkToWorldPos(chunkPos));
         }
     }
 
     public void renderTransparent(Renderer renderer) {
         if (transparentMesh != null) {
-            renderer.renderMesh(transparentMesh, position);
+            renderer.renderMesh(transparentMesh, BlockPosition.chunkToWorldPos(chunkPos));
         }
     }
 
@@ -151,18 +151,11 @@ public class ChunkMesh {
         };
     }
 
-    private boolean shouldRenderFace(byte currentId, Vector3 pos, Direction dir) {
-        int nx = (int) (pos.getX() + dir.getX());
-        int ny = (int) (pos.getY() + dir.getY());
-        int nz = (int) (pos.getZ() + dir.getZ());
+    private boolean shouldRenderFace(byte currentId, Vector3 localPos, Direction dir) {
+        Vector3 worldPos = Vector3.add(BlockPosition.chunkToWorldPos(chunkPos), localPos);
+        Vector3 neightborPos = Vector3.add(worldPos, dir.getVector());
 
-        if (nx < 0 || nx >= chunk.SIZE ||
-                ny < 0 || ny >= chunk.SIZE ||
-                nz < 0 || nz >= chunk.SIZE) {
-            return true; // TODO: check neighbor chunk
-        }
-
-        byte neighborId = chunk.getBlock(nx, ny, nz);
+        byte neighborId = world.getBlock(neightborPos);
 
         if (neighborId == Blocks.AIR) return true;
 

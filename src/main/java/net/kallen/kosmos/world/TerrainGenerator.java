@@ -45,8 +45,10 @@ public class TerrainGenerator {
 
         var surfaceY = SEA_LEVEL + xOffset + zOffset;
 
-        if (y < surfaceY) {
+        if (y < surfaceY && y < SEA_LEVEL - 1) {
             return Blocks.STONE;
+        } else if (y < surfaceY) {
+            return Blocks.MUD;
         } else if (y < SEA_LEVEL) {
             return Blocks.BLUE_STAINED_GLASS;
         } else {
