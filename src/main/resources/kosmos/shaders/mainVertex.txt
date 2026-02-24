@@ -1,18 +1,30 @@
 #version 460 core
 
-in vec3 chunkPos;
+in vec3 position;
 in vec3 color;
 in vec2 textureCoord;
 
 out vec3 passColor;
 out vec2 passTextureCoord;
+out float visibility;
 
 uniform mat4 projection;
 uniform mat4 model;
 uniform mat4 view;
 
+uniform float fogDensity;
+uniform float fogGradient;
+
 void main() {
-	gl_Position = projection * view * model * vec4(chunkPos, 1.0);
+    // Fog
+	vec4 worldPos = model * vec4(position, 1.0);
+    vec4 viewPos  = view * worldPos;
+    float distance = length(viewPos.xyz);
+    visibility = exp(-pow(distance * fogDensity, fogGradient));
+    visibility = clamp(visibility, 0.0, 1.0);
+
+	gl_Position = projection * viewPos;
+
 	passColor = color;
 	passTextureCoord = textureCoord;
 }

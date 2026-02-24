@@ -55,7 +55,8 @@ public class Kosmos implements Runnable {
                 ResourceLocation.fromNamespaceAndDirectory(Kosmos.ID, ResourceLocation.SHADERS, "mainFragment").toFilePath(".txt")
         );
 
-        window.setBackgroundColor(.5f, .7f, 1f);
+        Vector3 skyColor = new Vector3(0.5f, 0.7f, 1.0f);
+        window.setBackgroundColor(skyColor);
         // window.setFullscreen(true);
         window.create();
         window.mouseState(true);
@@ -69,7 +70,7 @@ public class Kosmos implements Runnable {
         world.update();
         player.setGamemode(Gamemode.SPECTATOR);
 
-        renderer = new Renderer(window, shader, camera);
+        renderer = new Renderer(window, shader, camera, skyColor);
 
         lastMousePos.set((float) Input.getMouseX(), (float) Input.getMouseY());
     }
@@ -110,6 +111,7 @@ public class Kosmos implements Runnable {
             if (Input.isKeyPressed(Key.F11)) window.setFullscreen(!window.isFullscreen());
             if (Input.isKeyPressed(Key.L)) window.mouseState(!window.getMouseLock());
             if (Input.isKeyPressed(Key.EQUAL)) checkGlError();
+            if (Input.isKeyPressed(Key.R)) renderer.setSkyColor(new Vector3(0.4f, 0.4f, 0.8f));
 
             if (Input.isKeyPressed(Key.F)) player.setFlying(!player.isFlying());
 

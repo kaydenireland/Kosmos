@@ -119,6 +119,12 @@ public class Window {
         bgColor.setZ(b);
     }
 
+    public void setBackgroundColor(Vector3 color) {
+        bgColor.setX(color.getX());
+        bgColor.setY(color.getY());
+        bgColor.setZ(color.getZ());
+    }
+
     public boolean isFullscreen() {
         return isFullscreen;
     }
