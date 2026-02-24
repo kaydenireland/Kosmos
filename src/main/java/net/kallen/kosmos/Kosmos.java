@@ -146,9 +146,13 @@ public class Kosmos implements Runnable {
     }
 
     private void render() {
+        renderer.beginFrame();
+
         world.render(renderer);
 
         window.swapBuffers();
+
+        renderer.endFrame();
     }
 
     private void close() {

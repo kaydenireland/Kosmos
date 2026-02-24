@@ -10,6 +10,7 @@ uniform sampler2D tex;
 uniform vec3 skyColor;
 
 void main() {
+    if(outColor.a < 0.1) discard;
 	outColor = texture(tex, passTextureCoord);
 	outColor = mix(vec4(skyColor, 1.0), outColor, visibility);
 }
