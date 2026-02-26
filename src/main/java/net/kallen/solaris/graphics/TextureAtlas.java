@@ -1,7 +1,7 @@
 package main.java.net.kallen.solaris.graphics;
 
 import main.java.net.kallen.solaris.math.vector.Vector2;
-import main.java.net.kallen.solaris.util.TextureLoader;
+import main.java.net.kallen.solaris.util.ImageUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -40,7 +40,7 @@ public class TextureAtlas {
             int gridX = i % gridSize;
             int gridY = i / gridSize;
 
-            ByteBuffer textureData = TextureLoader.loadTexture(textureSize, paths[i]);
+            ByteBuffer textureData = ImageUtils.loadTexture(textureSize, paths[i]);
 
             if (textureData != null) {
                 // Copy texture to atlas

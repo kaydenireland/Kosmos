@@ -1,6 +1,7 @@
 package main.java.net.kallen.solaris.object;
 
 import main.java.net.kallen.solaris.graphics.Mesh;
+import main.java.net.kallen.solaris.graphics.Renderer;
 import main.java.net.kallen.solaris.math.vector.Vector3;
 
 public class GameObject {
@@ -12,6 +13,10 @@ public class GameObject {
         this.rotation = rotation;
         this.scale = scale;
         this.mesh = mesh;
+    }
+
+    public void render(Renderer renderer) {
+        renderer.renderMesh(mesh, position);
     }
 
     public void update() {

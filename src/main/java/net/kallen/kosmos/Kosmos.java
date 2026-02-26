@@ -11,7 +11,7 @@ import main.java.net.kallen.solaris.object.camera.FirstPersonCamera;
 import main.java.net.kallen.kosmos.entity.Gamemode;
 import main.java.net.kallen.kosmos.entity.Player;
 import main.java.net.kallen.kosmos.render.ModelRegistry;
-import main.java.net.kallen.kosmos.util.ResourceLocation;
+import main.java.net.kallen.solaris.util.Identifier;
 import main.java.net.kallen.solaris.graphics.TextureAtlas;
 import main.java.net.kallen.kosmos.world.World;
 import org.lwjgl.opengl.GL11;
@@ -51,8 +51,8 @@ public class Kosmos implements Runnable {
         System.out.println("Initializing Game");
         window = new Window(WIDTH, HEIGHT, "Kosmos");
         shader = new Shader(
-                ResourceLocation.fromNamespaceAndDirectory(Kosmos.ID, ResourceLocation.SHADERS, "mainVertex").toFilePath(".txt"),
-                ResourceLocation.fromNamespaceAndDirectory(Kosmos.ID, ResourceLocation.SHADERS, "mainFragment").toFilePath(".txt")
+                Identifier.fromNamespaceAndDirectory(Kosmos.ID, Identifier.SHADERS, "mainVertex").toFilePath(".txt"),
+                Identifier.fromNamespaceAndDirectory(Kosmos.ID, Identifier.SHADERS, "mainFragment").toFilePath(".txt")
         );
 
         Vector3 skyColor = new Vector3(0.5f, 0.7f, 1.0f);
@@ -71,6 +71,7 @@ public class Kosmos implements Runnable {
         player.setGamemode(Gamemode.SPECTATOR);
 
         renderer = new Renderer(window, shader, camera, skyColor);
+        renderer.setFogDensity(0f);
 
         lastMousePos.set((float) Input.getMouseX(), (float) Input.getMouseY());
     }

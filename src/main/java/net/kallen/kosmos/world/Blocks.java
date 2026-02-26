@@ -1,7 +1,7 @@
 package main.java.net.kallen.kosmos.world;
 
 import main.java.net.kallen.kosmos.Kosmos;
-import main.java.net.kallen.kosmos.util.ResourceLocation;
+import main.java.net.kallen.solaris.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,9 +85,9 @@ public class Blocks {
         ArrayList<String> list = new ArrayList<>();
 
         for (String name : NAME_TO_ID.keySet()) {
-            ResourceLocation location = ResourceLocation.fromNamespaceAndDirectory(
+            Identifier location = Identifier.fromNamespaceAndDirectory(
                     Kosmos.ID,
-                    ResourceLocation.BLOCK_TEXTURES,
+                    Identifier.BLOCK_TEXTURES,
                     name
             );
             list.add(location.toImagePath());

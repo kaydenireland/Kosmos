@@ -16,14 +16,14 @@ import java.util.Map;
 
 public class World {
 
-    private final double seed;
+    private final long seed;
     private ITerrainGenerator terrainGenerator;
     private Map<Vector3, Chunk> chunks = new HashMap<>();
     private TextureAtlas atlas;
 
     private int loadDistance = 8;
 
-    public World(TextureAtlas atlas, double seed) {
+    public World(TextureAtlas atlas, long seed) {
         this.atlas = atlas;
         this.seed = seed;
         this.terrainGenerator = new NormalTerrain(seed);

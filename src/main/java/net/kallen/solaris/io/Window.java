@@ -1,12 +1,22 @@
 package main.java.net.kallen.solaris.io;
 
+import main.java.net.kallen.solaris.graphics.Material;
 import main.java.net.kallen.solaris.math.matrix.Matrix4;
 import main.java.net.kallen.solaris.math.vector.Vector3;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.stb.STBImage;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 public class Window {
 
@@ -51,7 +61,8 @@ public class Window {
         GLFWVidMode videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
         windowPosX[0] = (videoMode.width() - width) / 2;
         windowPosY[0] = (videoMode.height() - height) / 2;
-        GLFW.glfwSetWindowPos(window, windowPosX[0], windowPosY[0]);        GLFW.glfwMakeContextCurrent(window);
+        GLFW.glfwSetWindowPos(window, windowPosX[0], windowPosY[0]);
+        GLFW.glfwMakeContextCurrent(window);
 
         GL.createCapabilities();    // Allows rendering to window
         GL11.glEnable(GL11.GL_DEPTH_TEST);

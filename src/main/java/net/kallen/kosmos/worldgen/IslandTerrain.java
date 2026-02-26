@@ -1,19 +1,10 @@
 package main.java.net.kallen.kosmos.worldgen;
 
 import main.java.net.kallen.kosmos.world.Blocks;
-import main.java.net.kallen.kosmos.world.chunk.Chunk;
-import main.java.net.kallen.solaris.math.vector.Vector3;
-import main.java.net.kallen.solaris.noise.PerlinNoise;
 
-public class TerrainGenerator implements ITerrainGenerator {
+public class IslandTerrain implements ITerrainGenerator {
 
-    private final PerlinNoise noise;
-
-    public TerrainGenerator(double seed) {
-        this.noise = new PerlinNoise(seed);
-    }
-
-
+    public IslandTerrain() { }
 
     @Override
     public byte determineBlockType(int x, int y, int z) {
@@ -22,13 +13,13 @@ public class TerrainGenerator implements ITerrainGenerator {
             return Blocks.BEDROCK;
         }
 
-        var frequency = 0.1f;
-        var amplitude = 10;
+        float frequency = 0.05f;
+        float amplitude = 10f;
 
         var xOffset = Math.sin(x * frequency) * amplitude;
         var zOffset = Math.sin(z * frequency) * amplitude;
 
-        var surfaceY = SEA_LEVEL + xOffset + zOffset;
+        var surfaceY = SEA_LEVEL + xOffset + zOffset - 12;
 
         if (y < surfaceY && y < SEA_LEVEL - 1) {
             return Blocks.STONE;
@@ -41,5 +32,4 @@ public class TerrainGenerator implements ITerrainGenerator {
         }
 
     }
-
 }

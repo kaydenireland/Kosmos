@@ -7,10 +7,10 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-public class TextureLoader {
+public class ImageUtils {
 
     public static ByteBuffer loadTexture(String path) {
-        try (InputStream is = TextureLoader.class.getResourceAsStream(path)) {
+        try (InputStream is = ImageUtils.class.getResourceAsStream(path)) {
             if (is == null) {
                 System.err.println("Resource not found: " + path);
                 return null;
@@ -41,7 +41,7 @@ public class TextureLoader {
     }
 
     public static ByteBuffer loadTexture(int size, String path) {
-        try (InputStream is = TextureLoader.class.getResourceAsStream(path)) {
+        try (InputStream is = ImageUtils.class.getResourceAsStream(path)) {
             if (is == null) {
                 System.err.println("Resource not found: " + path);
                 return null;

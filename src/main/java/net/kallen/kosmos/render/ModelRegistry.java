@@ -1,7 +1,7 @@
 package main.java.net.kallen.kosmos.render;
 
 import main.java.net.kallen.kosmos.Kosmos;
-import main.java.net.kallen.kosmos.util.ResourceLocation;
+import main.java.net.kallen.solaris.util.Identifier;
 import main.java.net.kallen.kosmos.world.Blocks;
 import main.java.net.kallen.solaris.position.Direction;
 
@@ -108,9 +108,9 @@ public class ModelRegistry {
 
         List<String> texturePaths = new ArrayList<>();
         for (String textureName : uniqueTextures) {
-            ResourceLocation location = ResourceLocation.fromNamespaceAndDirectory(
+            Identifier location = Identifier.fromNamespaceAndDirectory(
                     Kosmos.ID,
-                    ResourceLocation.BLOCK_TEXTURES,
+                    Identifier.BLOCK_TEXTURES,
                     textureName
             );
             texturePaths.add(location.toImagePath());

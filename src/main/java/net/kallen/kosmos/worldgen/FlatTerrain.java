@@ -1,8 +1,6 @@
 package main.java.net.kallen.kosmos.worldgen;
 
 import main.java.net.kallen.kosmos.world.Blocks;
-import main.java.net.kallen.kosmos.world.chunk.Chunk;
-import main.java.net.kallen.solaris.math.vector.Vector3;
 
 public class FlatTerrain implements ITerrainGenerator {
 

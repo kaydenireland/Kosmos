@@ -1,21 +1,20 @@
-package main.java.net.kallen.kosmos.util;
-
-import main.java.net.kallen.kosmos.Kosmos;
+package main.java.net.kallen.solaris.util;
 
 import java.util.Objects;
 
-public class ResourceLocation {
+public class Identifier {
 
     private final String namespace;
     private final String path;
 
+    public static final String ICONS = "icons";
     public static final String SHADERS = "shaders";
     public static final String TEXTURES = "textures";
     public static final String BLOCK_TEXTURES = "textures/block";
     public static final String ITEM_TEXTURES = "textures/item";
     public static final String ENTITY_TEXTURES = "textures/entity";
 
-    private ResourceLocation(String namespace, String path) {
+    private Identifier(String namespace, String path) {
         this.namespace = namespace.toLowerCase();
         this.path = path.toLowerCase();
         validate();
@@ -69,8 +68,8 @@ public class ResourceLocation {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof ResourceLocation)) return false;
-        ResourceLocation other = (ResourceLocation) obj;
+        if (!(obj instanceof Identifier)) return false;
+        Identifier other = (Identifier) obj;
         return namespace.equals(other.namespace) && path.equals(other.path);
     }
 
@@ -80,52 +79,48 @@ public class ResourceLocation {
     }
 
     // Factory methods
-    public static ResourceLocation withDefaultNamespace(String path) {
-        return new ResourceLocation(Kosmos.ID, path);
+    public static Identifier fromNamespace(String namespace, String path) {
+        return new Identifier(namespace, path);
     }
 
-    public static ResourceLocation fromNamespace(String namespace, String path) {
-        return new ResourceLocation(namespace, path);
+    public static Identifier fromNamespaceAndDirectory(String namespace, String directory, String item) {
+        return new Identifier(namespace, directory + "/" + item);
     }
 
-    public static ResourceLocation fromNamespaceAndDirectory(String namespace, String directory, String item) {
-        return new ResourceLocation(namespace, directory + "/" + item);
-    }
-
-    // Parse from "namespace:path" or just "path" (uses default namespace)
-    public static ResourceLocation parse(String location) {
+    // Parse from "namespace:path" or just "path"
+    public static Identifier parse(String location) {
         String[] parts = location.split(":", 2);
         if (parts.length == 2) {
-            return new ResourceLocation(parts[0], parts[1]);
+            return new Identifier(parts[0], parts[1]);
         } else {
-            return withDefaultNamespace(parts[0]);
+            return fromNamespace(null, parts[0]);
         }
     }
 
     // Convenient helpers for common resource types
-    public static ResourceLocation blockTexture(String name) {
-        return withDefaultNamespace(BLOCK_TEXTURES + "/" + name);
+    public static Identifier blockTexture(String namespace, String name) {
+        return fromNamespace(namespace, BLOCK_TEXTURES + "/" + name);
     }
 
-    public static ResourceLocation itemTexture(String name) {
-        return withDefaultNamespace(ITEM_TEXTURES + "/" + name);
+    public static Identifier itemTexture(String namespace,String name) {
+        return fromNamespace(namespace, ITEM_TEXTURES + "/" + name);
     }
 
-    public static ResourceLocation entityTexture(String name) {
-        return withDefaultNamespace(ENTITY_TEXTURES + "/" + name);
+    public static Identifier entityTexture(String namespace,String name) {
+        return fromNamespace(namespace, ENTITY_TEXTURES + "/" + name);
     }
 
-    public static ResourceLocation texture(String path) {
-        return withDefaultNamespace(TEXTURES + "/" + path);
+    public static Identifier texture(String namespace,String path) {
+        return fromNamespace(namespace, TEXTURES + "/" + path);
     }
 
-    // Create a new ResourceLocation with a different path but same namespace
-    public ResourceLocation withPath(String newPath) {
-        return new ResourceLocation(this.namespace, newPath);
+    // Create a new Identifier with a different path but same namespace
+    public Identifier withPath(String newPath) {
+        return new Identifier(this.namespace, newPath);
     }
 
-    // Create a new ResourceLocation with a different namespace but same path
-    public ResourceLocation withNamespace(String newNamespace) {
-        return new ResourceLocation(newNamespace, this.path);
+    // Create a new Identifier with a different namespace but same path
+    public Identifier withNamespace(String newNamespace) {
+        return new Identifier(newNamespace, this.path);
     }
 }
