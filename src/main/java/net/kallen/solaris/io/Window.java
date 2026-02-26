@@ -1,22 +1,12 @@
 package main.java.net.kallen.solaris.io;
 
-import main.java.net.kallen.solaris.graphics.Material;
 import main.java.net.kallen.solaris.math.matrix.Matrix4;
 import main.java.net.kallen.solaris.math.vector.Vector3;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.stb.STBImage;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 
 public class Window {
 
@@ -41,7 +31,7 @@ public class Window {
         this.width = width;
         this.height = height;
         this.title = title;
-        projection = Matrix4.projection(70f, (float) width / (float) height, 0.1f, 1000f);
+        projection = Matrix4.projection(70f, (float) width / (float) height, 1f, 3200f);
         mouseLock = false;
     }
 
@@ -50,6 +40,8 @@ public class Window {
         if (!GLFW.glfwInit()) {
             System.err.println("ERROR: GLFW wasn't initialized");
         }
+
+        GLFW.glfwWindowHint(GLFW.GLFW_DEPTH_BITS, 24);
 
         input = new Input();
         window = GLFW.glfwCreateWindow(width, height, title, isFullscreen ? GLFW.glfwGetPrimaryMonitor() : 0, 0);
@@ -69,7 +61,7 @@ public class Window {
 
         createCallbacks();
 
-        GLFW.glfwSwapInterval(10);   // Caps window at 60fps
+        //GLFW.glfwSwapInterval(10);   // Caps window at 60fps
 
         time = System.currentTimeMillis();
 
@@ -94,6 +86,7 @@ public class Window {
     public void update() {
         if (isResized) {
             GL11.glViewport(0, 0, width, height);
+            projection = Matrix4.projection(70f, (float) width / (float) height, 1f, 3200f);
             isResized = false;
         }
         GL11.glClearColor(bgColor.getX(), bgColor.getY(), bgColor.getZ(), 1f);
