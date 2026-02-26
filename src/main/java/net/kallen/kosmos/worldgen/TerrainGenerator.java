@@ -1,40 +1,24 @@
-package main.java.net.kallen.kosmos.world;
+package main.java.net.kallen.kosmos.worldgen;
 
+import main.java.net.kallen.kosmos.world.Blocks;
 import main.java.net.kallen.kosmos.world.chunk.Chunk;
 import main.java.net.kallen.solaris.math.vector.Vector3;
 import main.java.net.kallen.solaris.noise.PerlinNoise;
 
-public class TerrainGenerator {
+public class TerrainGenerator implements ITerrainGenerator {
 
     private final PerlinNoise noise;
-
-    private static final int SEA_LEVEL = 0;
-
 
     public TerrainGenerator(double seed) {
         this.noise = new PerlinNoise(seed);
     }
 
-    public void generateChunk(Chunk chunk, Vector3 chunkPos) {
-        for (int x = 0; x < chunk.SIZE; x++) {
-            int worldX = (int) chunkPos.getX() * chunk.SIZE + x;
 
-            for (int z = 0; z < chunk.SIZE; z++) {
-                int worldZ = (int) chunkPos.getZ() * chunk.SIZE + z;
 
-                for (int y = 0; y < chunk.SIZE; y++) {
-                    int worldY = (int) chunkPos.getY() * chunk.SIZE + y;
+    @Override
+    public byte determineBlockType(int x, int y, int z) {
 
-                    byte blockType = determineBlockType(worldX, worldY, worldZ);
-                    chunk.setBlock(x, y, z, blockType);
-                }
-            }
-        }
-    }
-
-    private byte determineBlockType(int x, int y, int z) {
-
-        if (y == -128) {
+        if (y == BEDROCK_LEVEL) {
             return Blocks.BEDROCK;
         }
 

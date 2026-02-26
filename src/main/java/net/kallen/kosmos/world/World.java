@@ -1,6 +1,9 @@
 package main.java.net.kallen.kosmos.world;
 
 import main.java.net.kallen.kosmos.world.chunk.Chunk;
+import main.java.net.kallen.kosmos.worldgen.FlatTerrain;
+import main.java.net.kallen.kosmos.worldgen.ITerrainGenerator;
+import main.java.net.kallen.kosmos.worldgen.TerrainGenerator;
 import main.java.net.kallen.solaris.graphics.Renderer;
 import main.java.net.kallen.solaris.math.vector.Vector3;
 import main.java.net.kallen.kosmos.entity.Player;
@@ -15,7 +18,7 @@ import java.util.Map;
 public class World {
 
     private final double seed;
-    private TerrainGenerator terrainGenerator;
+    private ITerrainGenerator terrainGenerator;
     private Map<Vector3, Chunk> chunks = new HashMap<>();
     private TextureAtlas atlas;
 
@@ -24,7 +27,7 @@ public class World {
     public World(TextureAtlas atlas, double seed) {
         this.atlas = atlas;
         this.seed = seed;
-        this.terrainGenerator = new TerrainGenerator(this.seed);
+        this.terrainGenerator = new FlatTerrain();
     }
 
     public void loadChunk(Vector3 chunkPos) {
