@@ -1,9 +1,8 @@
 package main.java.net.kallen.kosmos.world;
 
 import main.java.net.kallen.kosmos.world.chunk.Chunk;
-import main.java.net.kallen.kosmos.worldgen.FlatTerrain;
 import main.java.net.kallen.kosmos.worldgen.ITerrainGenerator;
-import main.java.net.kallen.kosmos.worldgen.TerrainGenerator;
+import main.java.net.kallen.kosmos.worldgen.NormalTerrain;
 import main.java.net.kallen.solaris.graphics.Renderer;
 import main.java.net.kallen.solaris.math.vector.Vector3;
 import main.java.net.kallen.kosmos.entity.Player;
@@ -27,11 +26,11 @@ public class World {
     public World(TextureAtlas atlas, double seed) {
         this.atlas = atlas;
         this.seed = seed;
-        this.terrainGenerator = new FlatTerrain();
+        this.terrainGenerator = new NormalTerrain(seed);
     }
 
     public void loadChunk(Vector3 chunkPos) {
-        if(!chunks.containsKey(chunkPos) && chunkPos.getY() >= -8) {
+        if(!chunks.containsKey(chunkPos)) {
             Chunk newChunk = new Chunk(this, atlas, chunkPos);
             terrainGenerator.generateChunk(newChunk, chunkPos);
             chunks.put(chunkPos, newChunk);
@@ -63,14 +62,17 @@ public class World {
 
         for (int x = px - loadDistance; x <= px + loadDistance; x++) {
             for (int z = pz - loadDistance; z <= pz + loadDistance; z++) {
-                for (int y = py - 1; y <= py + 1; y++) {
-                    Vector3 chunkPos = new Vector3(x, y, z);
 
-                    int dx = x - px;
-                    int dz = z - pz;
-                    if (dx * dx + dz * dz <= loadDistance * loadDistance) {
-                        loadChunk(chunkPos);
-                    }
+                int dx = x - px;
+                int dz = z - pz;
+                if (dx * dx + dz * dz > loadDistance * loadDistance) continue;
+
+                for (int y = py - loadDistance / 2; y <= py + loadDistance / 2; y++) { // TODO: Proper Y loading
+                    if (y < -8) continue;
+
+                    Vector3 chunkPos = new Vector3(x, y, z);
+                    loadChunk(chunkPos);
+
                 }
             }
         }
@@ -78,15 +80,18 @@ public class World {
 
     private void unloadDistantChunks(Vector3 playerChunkPos) {
         int px = (int) playerChunkPos.getX();
+        int py = (int) playerChunkPos.getY();
         int pz = (int) playerChunkPos.getZ();
 
         List<Vector3> chunksToUnload = new ArrayList<>();
 
         for (Vector3 chunkPos : chunks.keySet()) {
             int dx = (int) chunkPos.getX() - px;
+            int dy = (int) chunkPos.getY() - py;
             int dz = (int) chunkPos.getZ() - pz;
 
-            if (dx * dx + dz * dz > (loadDistance + 2) * (loadDistance + 2)) {
+            if (dx * dx + dz * dz > loadDistance * loadDistance
+            || Math.abs(dy) > loadDistance / 2) {
                 chunksToUnload.add(chunkPos);
             }
         }
