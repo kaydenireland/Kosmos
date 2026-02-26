@@ -29,6 +29,7 @@ public class Renderer {
     public void beginFrame() {
 
         // Global state
+        enableDepthMask(true);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
 
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -85,6 +86,10 @@ public class Renderer {
         GL30.glDisableVertexAttribArray(1);
         GL30.glDisableVertexAttribArray(2);
         GL30.glBindVertexArray(0);
+    }
+
+    public void enableDepthMask(boolean value) {
+        GL11.glDepthMask(value);
     }
 
     public void renderMesh(Mesh mesh) {

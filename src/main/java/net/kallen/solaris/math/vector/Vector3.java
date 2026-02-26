@@ -104,6 +104,26 @@ public class Vector3 {
         return new Vector3(x, y, z);
     }
 
+    public static long pack(Vector3 vec) {  // 21 bits for each long
+        long x = ((long) (int) vec.getX()) & 0x1FFFFFL;
+        long y = ((long) (int) vec.getX()) & 0x1FFFFFL;
+        long z = ((long) (int) vec.getX()) & 0x1FFFFFL;
+
+        return (x << 42) | (y << 21) | z;
+    }
+
+    public static Vector3 unpack(long key) {
+        long x = (key >> 42) & 0x1FFFFFL;
+        long y = (key >> 21) & 0x1FFFFFL;
+        long z = (key      ) & 0x1FFFFFL;
+
+        if ((x & 0x100000L) != 0 ) x |= ~0x1FFFFFL;
+        if ((y & 0x100000L) != 0 ) y |= ~0x1FFFFFL;
+        if ((z & 0x100000L) != 0 ) z |= ~0x1FFFFFL;
+
+        return new Vector3(x, y, z);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

@@ -160,12 +160,12 @@ public class ChunkMesh {
 
         if (neighborId == Blocks.AIR) return true;
 
-        Block currentBlock = Blocks.getBlockFromId(currentId);
-        Block neighborBlock = Blocks.getBlockFromId(neighborId);
+        Block current = Blocks.getBlockFromId(currentId);
+        Block neighbor = Blocks.getBlockFromId(neighborId);
 
-        if (neighborBlock.isOpaque()) return false;
+        if (neighbor.isOpaque()) return false;
 
-        return currentBlock.isOpaque() || currentId != neighborId;
+        return current.isOpaque() || currentId != neighborId;
     }
 
     private void addFace(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, float[] uvs, boolean isTransparent) {
